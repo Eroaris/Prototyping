@@ -1,33 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Vector3 moveInput;
+    private Collider2D myCollider2D;
+    public Vector3 moveInput;
     public float speed = 5f;
-    public float swordSize = 3f;
-    public LayerMask swordMask;
-    public float attackCooldown = 1 ;
-    public float cooldownTimer = 1 ;
-    void Start()
+    public int health = 3;
+    private int _currentHp;
+    void Awake()
     {
-        
+        myCollider2D = GetComponent<Collider2D>();
+        _currentHp = health;
     }
     void Update()
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         transform.position += moveInput.normalized * speed * Time.deltaTime;
-
-        if (cooldownTimer >= 0)
-        {
-            cooldownTimer -= Time.deltaTime;
-        }
-        else
-        {
-            cooldownTimer = attackCooldown;
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position + moveInput, swordSize, moveInput, swordSize, swordMask);
-        }
     }
+    public int ApplyDamage(int damageAmount)
+    {
+        _currentHp -= damageAmount;
+       
+        if (_currentHp <= 0)
+        {
+            Destroy(gameObject);
+        }
+
+        return _currentHp;
+    } 
 }
