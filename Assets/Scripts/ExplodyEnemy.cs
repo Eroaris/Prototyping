@@ -1,25 +1,25 @@
-using System;
+
 using UnityEngine;
+
 
 public class ExplodyEnemy : MonoBehaviour
 {
     private Enemy _enemy;
-    private Vector3 distanceToPlayer;
     public LayerMask explodyMask;
-    public int damage = 3;
+    public float explosionTimer = 3;
+    public int playerDamage = 3;
+    private int enemyDamage = 999;
     private void Awake()
     {
         _enemy = GetComponent<Enemy>();
-        
     }
 
     private void Update()
     {
         float dist = Vector3.Distance(_enemy.target.transform.position, transform.position);
-
+        
         if (dist <= 3)
         {
-            float explosionTimer = 3;
             explosionTimer -= Time.deltaTime;
             if (explosionTimer <= 0)
             {
@@ -32,7 +32,7 @@ public class ExplodyEnemy : MonoBehaviour
 
                     if (player != null)
                     {
-                        player.ApplyDamage(damage);
+                        player.ApplyDamage(playerDamage);
                     }
                     
                     Enemy enemy;
@@ -40,10 +40,10 @@ public class ExplodyEnemy : MonoBehaviour
 
                     if (enemy != null)
                     {
-                        enemy.ApplyDamage(damage);
+                        enemy.ApplyDamage(enemyDamage);
                     }
                 }
-                Destroy(gameObject);
+                Destroy(gameObject); 
             }
         }
     }
