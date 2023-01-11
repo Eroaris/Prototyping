@@ -7,8 +7,9 @@ public class Sword : MonoBehaviour
     private Vector3 _currentDirection;
     public Player player;
     public LayerMask swordMask;
-    public float attackCooldown = 1 ;
-    private float _cooldownTimer = 1 ;
+    public float attackCooldown = 1;
+    private float _cooldownTimer = 1;
+    private double _attackDuration = 0.3;
     public int damage = 3;
     void Awake()
     {
@@ -21,18 +22,20 @@ public class Sword : MonoBehaviour
         {
             _currentDirection = player.moveInput;
         }
-        transform.position = player.transform.position + _currentDirection * 0.5f;
+        transform.position = player.transform.position + _currentDirection * 0.7f;
         
         if (_cooldownTimer >= 0)
         {
+            _attackDuration = 0.3;
             _cooldownTimer -= Time.deltaTime;
             _spriteRenderer.enabled = false;
         }
-        else
+        else if (_attackDuration >= 0.3)
         {
             _cooldownTimer = attackCooldown;
+            _attackDuration -= Time.deltaTime;
             _spriteRenderer.enabled = true;
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _myCollider2D.radius, swordMask);
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position , _myCollider2D.radius, swordMask);
             
             foreach (var collider2D in hits)
             {
