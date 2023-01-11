@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Collider2D myCollider2D;
     public Vector3 moveInput;
     public float speed = 5f;
     public int health = 3;
@@ -13,7 +12,6 @@ public class Player : MonoBehaviour
     
     void Awake()
     {
-        myCollider2D = GetComponent<Collider2D>();
         _currentHp = health;
     }
     void Update()

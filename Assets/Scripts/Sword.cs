@@ -7,8 +7,8 @@ public class Sword : MonoBehaviour
     private Vector3 _currentDirection;
     public Player player;
     public LayerMask swordMask;
-    public float attackCooldown = 2;
-    private float _cooldownTimer = 2;
+    public float attackCooldown = 3;
+    private float _cooldownTimer;
     private float _attackDurationTimer = 0.25f;
     private float _attackDuration = 0.25f;
     public int damage = 3;
@@ -16,6 +16,7 @@ public class Sword : MonoBehaviour
     {
         _myCollider2D = GetComponent<CircleCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _cooldownTimer = attackCooldown;
     }
     void Update()
     {

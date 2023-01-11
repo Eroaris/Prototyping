@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+     public int targetFrameRate = 30;
+     
+         private void Awake()
+         {
+             QualitySettings.vSyncCount = 0;
+             Application.targetFrameRate = targetFrameRate;
+         }
 }
