@@ -9,8 +9,7 @@ public class ExplodyEnemy : MonoBehaviour
     public LayerMask explodyMask;
     public float explosionTimer = 3;
     public int playerDamage = 3;
-    private int enemyDamage = 10;
-    private bool playerContact;
+    private readonly int _enemyDamage = 999;
     private void Awake()
     {
         _enemy = GetComponent<Enemy>();
@@ -23,29 +22,28 @@ public class ExplodyEnemy : MonoBehaviour
         if (dist <= 3)
         {
             explosionTimer -= Time.deltaTime;
-            if (explosionTimer <= 0 || playerContact)
+            if (explosionTimer <= 0)
             {
                 Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f, explodyMask);
 
                 foreach (var collider2D in hits)
                 {
-                    Player player;
-                    player = collider2D.gameObject.GetComponent<Player>();
-
+                    var player = collider2D.gameObject.GetComponent<Player>();
+                    
                     if (player != null)
                     {
                         player.ApplyDamage(playerDamage);
+                        Destroy(gameObject);
                     }
-                    
-                    Enemy enemy;
-                    enemy = collider2D.gameObject.GetComponent<Enemy>();
+
+                    var enemy = collider2D.gameObject.GetComponent<Enemy>();
 
                     if (enemy != null)
                     {
-                        enemy.ApplyDamage(enemyDamage);
+                        enemy.ApplyDamage(_enemyDamage);
+                        Destroy(gameObject);
                     }
                 }
-                Destroy(gameObject); 
             }
         }
     }
@@ -54,7 +52,9 @@ public class ExplodyEnemy : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            playerContact = true;
+          var player =  col.gameObject.GetComponent<Player>();
+          player.ApplyDamage(playerDamage);
+          Destroy(gameObject);
         }
     }
 }

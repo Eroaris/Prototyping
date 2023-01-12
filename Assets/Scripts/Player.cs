@@ -8,7 +8,44 @@ public class Player : MonoBehaviour
     private int _currentHp;
     private float _lastHitTime;
     private const float IFrameDuration = 2;
-
+    
+    private void OnEnable()
+    {
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+    }
+    private void OnDisable()
+    {
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+    private void OnGameStateChanged(GameStateManager.GameState targetstate)
+    {
+        switch (targetstate)
+        {
+            case GameStateManager.GameState.Start:
+                break;
+            
+            case GameStateManager.GameState.Ready:
+                break;
+            
+            case GameStateManager.GameState.Playing:
+                break;
+            
+            case GameStateManager.GameState.Upgrade:
+                break;
+                
+            case GameStateManager.GameState.Pause:
+                break;
+            
+            case GameStateManager.GameState.Win:
+                //cheer animation+vitory screen
+                break;
+            
+            case GameStateManager.GameState.Lose:
+                //death animation+game over
+                break;
+            
+        }
+    }
     void Awake()
     {
         _currentHp = health;
@@ -26,7 +63,7 @@ public class Player : MonoBehaviour
         {
             _currentHp -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
-            print("Damage taken!");
+            print(_currentHp);
         }
         
         if (_currentHp <= 0)

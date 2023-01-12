@@ -53,8 +53,7 @@ public class Sword : MonoBehaviour
                     continue;
                 }
 
-                Enemy enemy;
-                enemy = collider2D.gameObject.GetComponent<Enemy>();
+                var enemy = collider2D.gameObject.GetComponent<Enemy>();
 
                 if (enemy != null)
                 {
