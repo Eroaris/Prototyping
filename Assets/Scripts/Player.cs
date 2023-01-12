@@ -5,11 +5,10 @@ public class Player : MonoBehaviour
     public Vector3 moveInput;
     public float speed = 5f;
     public int health = 3;
-    private bool canTakeDamage = true;
     private int _currentHp;
-    private float lastHitTime = 0;
-    private float iFrameDuration = 2;
-    
+    private float _lastHitTime;
+    private const float IFrameDuration = 2;
+
     void Awake()
     {
         _currentHp = health;
@@ -22,11 +21,11 @@ public class Player : MonoBehaviour
     }
     public int ApplyDamage(int damageAmount)
     {
-        float check = lastHitTime+iFrameDuration;
+        float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup)
         {
             _currentHp -= damageAmount;
-            lastHitTime = Time.realtimeSinceStartup;
+            _lastHitTime = Time.realtimeSinceStartup;
             print("Damage taken!");
         }
         
