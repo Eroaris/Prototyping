@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 
@@ -8,7 +9,8 @@ public class ExplodyEnemy : MonoBehaviour
     public LayerMask explodyMask;
     public float explosionTimer = 3;
     public int playerDamage = 3;
-    private int enemyDamage = 999;
+    private int enemyDamage = 10;
+    private bool playerContact;
     private void Awake()
     {
         _enemy = GetComponent<Enemy>();
@@ -21,7 +23,7 @@ public class ExplodyEnemy : MonoBehaviour
         if (dist <= 3)
         {
             explosionTimer -= Time.deltaTime;
-            if (explosionTimer <= 0)
+            if (explosionTimer <= 0 || playerContact)
             {
                 Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f, explodyMask);
 
@@ -45,6 +47,14 @@ public class ExplodyEnemy : MonoBehaviour
                 }
                 Destroy(gameObject); 
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            playerContact = true;
         }
     }
 }
