@@ -37,12 +37,14 @@ public class Sword : MonoBehaviour
         {
             _cooldownTimer -= Time.deltaTime;
             _spriteRenderer.enabled = false;
+            _myCollider2D.enabled = false;
             
         }
         else if (_attackDurationTimer > 0)
         {
             _attackDurationTimer -= Time.deltaTime;
             _spriteRenderer.enabled = true;
+            _myCollider2D.enabled = true;
            
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _myCollider2D.radius, swordMask);
 
@@ -86,7 +88,7 @@ public class Sword : MonoBehaviour
 
     private IEnumerator KnockbackCo(Rigidbody2D enemy)
     {
-        if (enemy!= null)
+        if (enemy != null)
         {
             yield return new WaitForSeconds(knockBackTime);
             enemy.velocity = Vector2.zero;

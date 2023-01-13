@@ -119,7 +119,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   explosionTimer: 1000
-  playerDamage: 3
+  playerDamage: 0
 --- !u!50 &4938267573990366687
 Rigidbody2D:
   serializedVersion: 4
