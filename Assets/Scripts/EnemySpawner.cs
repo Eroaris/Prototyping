@@ -8,11 +8,12 @@ public class EnemySpawner : MonoBehaviour
     
     private Collider2D myCollider2D;
     private Vector3 _randomSpawnPosition;
-    public SlimeEnemy slimePrefab;
-    public ExplodyEnemy explodyPrefab;
-    private int randomEnemy;
-    private int maxEnemies = 1;
-    private int allowedEnemies;
+    public GameObject slimePrefab;
+    public GameObject explodyPrefab;
+    private float slimeInterval = 2f;
+    private float explodyInterval = 10f;
+    
+    private int maxEnemies;
     private void Awake()
     {
         myCollider2D = GetComponent<Collider2D>();
@@ -20,49 +21,19 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Spawn());
+        StartCoroutine(SpawnEnemy(slimeInterval,slimePrefab));
+        StartCoroutine(SpawnEnemy(explodyInterval, explodyPrefab ));
     }
 
-    private IEnumerator Spawn()
+    private IEnumerator SpawnEnemy(float interval, GameObject enemy)
     {
-        yield return new WaitForSeconds(5f);
-        
-        allowedEnemies = maxEnemies;
-        
-        while (allowedEnemies > 0)
-        {
-            randomEnemy = Random.Range(0,99);
-
-            if (randomEnemy > 15)
-            {
-                SpawnExplody();
-            }
-            else
-            {
-                SpawnSlime();
-            }
-
-            maxEnemies--;
-        }
-
-        maxEnemies++;
-    }
-    
-    
-    public void SpawnSlime()
-    {
-        _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
-        Instantiate(slimePrefab, _randomSpawnPosition, Quaternion.identity);
-            
-    }
-    public void SpawnExplody()
-    {
+        yield return new WaitForSeconds(interval);
         
         _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
-        Instantiate(explodyPrefab, _randomSpawnPosition, Quaternion.identity);
-            
-        
+       Instantiate(enemy, _randomSpawnPosition, Quaternion.identity);
+       StartCoroutine(SpawnEnemy(interval, enemy));
     }
+    
     private Vector3 RandomPointInBounds(Bounds bounds)
     {
         return  new Vector3(
