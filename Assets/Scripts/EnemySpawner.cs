@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,25 +10,58 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 _randomSpawnPosition;
     public SlimeEnemy slimePrefab;
     public ExplodyEnemy explodyPrefab;
-    
-
-    public void SpawnSlime(int count)
+    private int randomEnemy;
+    private int maxEnemies = 1;
+    private int allowedEnemies;
+    private void Awake()
     {
-        while (count > 0)
-        {
-            _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
-            Instantiate(slimePrefab, _randomSpawnPosition, Quaternion.identity);
-            --count;
-        }
+        myCollider2D = GetComponent<Collider2D>();
     }
-    public void SpawnExplody(int count)
+
+    private void Start()
     {
-        while (count > 0)
+        StartCoroutine(Spawn());
+    }
+
+    private IEnumerator Spawn()
+    {
+        yield return new WaitForSeconds(5f);
+        
+        allowedEnemies = maxEnemies;
+        
+        while (allowedEnemies > 0)
         {
-            _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
-            Instantiate(explodyPrefab, _randomSpawnPosition, Quaternion.identity);
-            --count;
+            randomEnemy = Random.Range(0,99);
+
+            if (randomEnemy > 15)
+            {
+                SpawnExplody();
+            }
+            else
+            {
+                SpawnSlime();
+            }
+
+            maxEnemies--;
         }
+
+        maxEnemies++;
+    }
+    
+    
+    public void SpawnSlime()
+    {
+        _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
+        Instantiate(slimePrefab, _randomSpawnPosition, Quaternion.identity);
+            
+    }
+    public void SpawnExplody()
+    {
+        
+        _randomSpawnPosition = RandomPointInBounds(myCollider2D.bounds);
+        Instantiate(explodyPrefab, _randomSpawnPosition, Quaternion.identity);
+            
+        
     }
     private Vector3 RandomPointInBounds(Bounds bounds)
     {
@@ -36,3 +70,4 @@ public class EnemySpawner : MonoBehaviour
             Random.Range(bounds.min.y, bounds.max.y));
     }
 }
+

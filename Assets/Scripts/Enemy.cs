@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public int health = 3;
     private int _currentHp;
     private float _lastHitTime;
-    private const float IFrameDuration = 1;
+    private const float IFrameDuration = 0.5f;
     
     private void OnEnable()
     {

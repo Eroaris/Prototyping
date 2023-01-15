@@ -101,8 +101,8 @@ MonoBehaviour:
   myRigidbody: {fileID: 0}
   _movement: {x: 0, y: 0, z: 0}
   target: {fileID: 0}
-  speed: 1.5
-  health: 4
+  speed: 0.5
+  health: 3
 --- !u!50 &7840811381308100974
 Rigidbody2D:
   serializedVersion: 4
