@@ -6,7 +6,7 @@ public class GameStateManager : MonoBehaviour
 {
      public int targetFrameRate = 30;
 
-     public static GameStateManager Instance; 
+     public static GameStateManager Instance;
      public delegate void GameStateChangeDelegate(GameState targetState);
      public static event GameStateChangeDelegate OnGameStateChanged; 
     

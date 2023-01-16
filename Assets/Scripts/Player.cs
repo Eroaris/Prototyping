@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameStateManager GSM;
     public Vector3 moveInput;
     public float speed = 5f;
     public int health = 3;
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour
         if (_currentHp <= 0)
         {
             Destroy(gameObject);
+            GSM.SetCurrentState(GameStateManager.GameState.Lose);
         }
 
         return _currentHp;

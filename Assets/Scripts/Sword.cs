@@ -31,21 +31,20 @@ public class Sword : MonoBehaviour
             _currentDirection = player.moveInput;
         }
 
-        transform.position = player.transform.position + _currentDirection * 0.7f;
+        transform.position = player.transform.position + _currentDirection * 1.5f;
 
         if (_cooldownTimer > 0)
         {
             _cooldownTimer -= Time.deltaTime;
             _spriteRenderer.enabled = false;
-            _myCollider2D.enabled = false;
+            
             
         }
         else if (_attackDurationTimer > 0)
         {
             _attackDurationTimer -= Time.deltaTime;
             _spriteRenderer.enabled = true;
-            _myCollider2D.enabled = true;
-           
+
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _myCollider2D.radius, swordMask);
 
             foreach (var collider2D in hits)
@@ -60,6 +59,9 @@ public class Sword : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.ApplyDamage(damage);
+                    Vector2 difference = enemy.transform.position - transform.position;
+                    difference = difference.normalized * knockBackPower;
+                    enemy.ReceiveKnockback(difference, knockBackTime);
                 }
             }
         }
@@ -69,30 +71,5 @@ public class Sword : MonoBehaviour
             _attackDurationTimer = _attackDuration;
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            Rigidbody2D enemy = other.GetComponent<Rigidbody2D>();
-            if (enemy != null)
-            {
-                enemy.isKinematic = false;
-                Vector2 difference = enemy.transform.position - transform.position;
-                difference = difference.normalized * knockBackPower;
-                enemy.AddForce(difference, ForceMode2D.Impulse);
-                StartCoroutine(KnockbackCo(enemy));
-            }
-        }
-    }
-
-    private IEnumerator KnockbackCo(Rigidbody2D enemy)
-    {
-        if (enemy != null)
-        {
-            yield return new WaitForSeconds(knockBackTime);
-            enemy.velocity = Vector2.zero;
-            enemy.isKinematic = true;
-        }
-    }
+    
 }

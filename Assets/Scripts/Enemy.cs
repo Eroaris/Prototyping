@@ -1,8 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public Enemy Instance;
+    public delegate void EnemyDestroyedDelegate(Enemy enemy);
+    public static event EnemyDestroyedDelegate OnEnemyDestroyed;
+    
     public Rigidbody2D myRigidbody;
     public Vector3 _movement;
     public Transform target;
@@ -76,9 +81,30 @@ public class Enemy : MonoBehaviour
 
         if (_currentHp <= 0)
         {
-            Destroy(gameObject);
+            DestroySelf();
         }
 
         return _currentHp;
     }
+
+    public void ReceiveKnockback(Vector2 difference,float knockbackTime)
+    {
+        myRigidbody.AddForce(difference, ForceMode2D.Impulse);
+        StartCoroutine(KnockbackCo(knockbackTime));
+        
+    }
+    private IEnumerator KnockbackCo(float knockBackTime)
+    {
+        yield return new WaitForSeconds(knockBackTime);
+        
+        myRigidbody.velocity = Vector2.zero;
+    }  
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
+        OnEnemyDestroyed.Invoke(this);
+        
+    }
+    
+    
 }
