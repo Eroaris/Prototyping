@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,18 +6,18 @@ public class Enemy : MonoBehaviour
     public Enemy Instance;
     public delegate void EnemyDestroyedDelegate(Enemy enemy);
     public static event EnemyDestroyedDelegate OnEnemyDestroyed;
-    
+    private SpriteRenderer _spriteRenderer; 
     public Rigidbody2D myRigidbody;
     public Vector3 _movement;
     public Transform target;
     public float speed;
-    private float maxSpeed;
+    public float maxSpeed;
     private Vector2 maxVelocity;
     public int health = 3;
     private int _currentHp;
     private float _lastHitTime;
     private const float IFrameDuration = 0.5f;
-    
+    private bool inKnockback;
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -53,21 +52,23 @@ public class Enemy : MonoBehaviour
     }
     private void Awake()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
     private void Start()
     {
         _currentHp = health;
-        maxSpeed = speed + 1;
     } 
-    void Update()
+    void FixedUpdate()
     {
        _movement = target.transform.position - transform.position;
-       myRigidbody.velocity += (Vector2) _movement.normalized * speed * Time.deltaTime;
-       if (myRigidbody.velocity.magnitude > maxSpeed)
+       myRigidbody.velocity += (Vector2) _movement.normalized * speed;
+       if (myRigidbody.velocity.magnitude > maxSpeed && inKnockback == false)
        {
+          
            myRigidbody.velocity = Vector2.ClampMagnitude(myRigidbody.velocity, maxSpeed);
+           
        }
     }
     public int ApplyDamage(int damageAmount)
@@ -75,13 +76,19 @@ public class Enemy : MonoBehaviour
         float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup)
         {
+            _spriteRenderer.color = Color.yellow;
             _currentHp -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
         }
-
+        else
+        {
+            _spriteRenderer.color = Color.white;
+        }
+        
         if (_currentHp <= 0)
         {
             DestroySelf();
+            print("Enemy Killed");
         }
 
         return _currentHp;
@@ -89,6 +96,7 @@ public class Enemy : MonoBehaviour
 
     public void ReceiveKnockback(Vector2 difference,float knockbackTime)
     {
+        inKnockback = true;
         myRigidbody.AddForce(difference, ForceMode2D.Impulse);
         StartCoroutine(KnockbackCo(knockbackTime));
         
@@ -98,12 +106,13 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(knockBackTime);
         
         myRigidbody.velocity = Vector2.zero;
+        inKnockback = false;
     }  
     public void DestroySelf()
     {
+        OnEnemyDestroyed?.Invoke(this);
+        print("Enemy Killed");
         Destroy(gameObject);
-        OnEnemyDestroyed.Invoke(this);
-        
     }
     
     

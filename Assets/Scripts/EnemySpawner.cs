@@ -11,11 +11,11 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 _randomSpawnPosition;
     public GameObject slimePrefab;
     public GameObject explodyPrefab;
-    private float slimeInterval = 2f;
+    private float slimeInterval = 10f;
     private float explodyInterval = 15f;
     public float minRadius;
     public float maxRadius;
-    private int maxEnemies = 8;
+    private int maxSlimes = 8;
     private int currentSlimes;
     private void Awake()
     {
@@ -34,7 +34,6 @@ public class EnemySpawner : MonoBehaviour
     private void WhenEnemyDestroyed(Enemy enemy)
     {
         currentSlimes--;
-        print(currentSlimes);
     }
     private void Start()
     {
@@ -50,19 +49,23 @@ public class EnemySpawner : MonoBehaviour
             
             _randomSpawnPosition = RandomPointonCircle(myCollider2D.bounds);
             Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
+            
         }
     }
     private IEnumerator SpawnSlimes(float interval, GameObject enemy)
     {
         while (true)
         {
-            yield return new WaitForSeconds(interval);
-
-            
+            while (currentSlimes < maxSlimes)
+            {
                 _randomSpawnPosition = RandomPointonCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
                 currentSlimes++;
+            }
+
+            maxSlimes++;
             
+            yield return new WaitForSeconds(interval);
         }
     }
     private Vector3 RandomPointonCircle(Bounds bounds)

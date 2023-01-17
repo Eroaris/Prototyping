@@ -19,8 +19,6 @@ public class SlimeEnemy : MonoBehaviour
         if (player != null)
         {
             player.ApplyDamage(damage);
-            _enemy.DestroySelf();
-            
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class Sword : MonoBehaviour
@@ -9,19 +7,12 @@ public class Sword : MonoBehaviour
     private Vector3 _currentDirection;
     public Player player;
     public LayerMask swordMask;
-    public float knockBackPower = 2;
-    public float knockBackTime = 0.5f;
-    public float attackCooldown = 3;
-    private float _cooldownTimer;
-    private float _attackDurationTimer = 0.25f;
-    private float _attackDuration = 0.25f;
-    public int damage = 3;
 
     void Awake()
     {
         _myCollider2D = GetComponent<CircleCollider2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _cooldownTimer = attackCooldown;
+        player._cooldownTimer = player.attackCooldown;
     }
 
     void Update()
@@ -33,37 +24,41 @@ public class Sword : MonoBehaviour
 
         transform.position = player.transform.position + _currentDirection * 1.5f;
 
-        if (_cooldownTimer > 0)
+        if (player._cooldownTimer > 0)
         {
-            _cooldownTimer -= Time.deltaTime;
+            player._cooldownTimer -= Time.deltaTime;
             _spriteRenderer.enabled = false;
             
             
         }
-        else if (_attackDurationTimer > 0)
+        else if (player._attackDurationTimer > 0)
         {
-            _attackDurationTimer -= Time.deltaTime;
+            player._attackDurationTimer -= Time.deltaTime;
             _spriteRenderer.enabled = true;
 
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _myCollider2D.radius, swordMask);
 
-            foreach (var collider2D in hits)
+            if (hits.Length > 0)
             {
-                if (collider2D == _myCollider2D)
+                foreach (var collider2D in hits)
                 {
-                    continue;
-                }
+                    if (collider2D == _myCollider2D)
+                    {
+                        continue;
+                    }
 
-                var enemy = collider2D.gameObject.GetComponent<Enemy>();
+                    var enemy = collider2D.gameObject.GetComponent<Enemy>();
 
-                if (enemy != null)
-                {
-                    enemy.ApplyDamage(damage);
-                    Vector2 difference = enemy.transform.position - transform.position;
-                    difference = difference.normalized * knockBackPower;
-                    enemy.ReceiveKnockback(difference, knockBackTime);
+                    if (enemy != null)
+                    {
+                        enemy.ApplyDamage(player.damage);
+                        Vector2 difference = enemy.transform.position - transform.position;
+                        difference = difference.normalized * player.knockBackPower;
+                        enemy.ReceiveKnockback(difference, player.knockBackTime);
+                    }
                 }
             }
+           
         }
         else
         {
