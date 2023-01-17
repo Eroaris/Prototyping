@@ -128,4 +128,3 @@ public class Player : MonoBehaviour
         return _currentHp;
     }
 }
-}

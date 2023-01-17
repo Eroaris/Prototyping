@@ -62,8 +62,8 @@ public class Sword : MonoBehaviour
         }
         else
         {
-            _cooldownTimer = attackCooldown;
-            _attackDurationTimer = _attackDuration;
+            player._cooldownTimer = player.attackCooldown;
+            player._attackDurationTimer = player.attackCooldown;
         }
     }
     
