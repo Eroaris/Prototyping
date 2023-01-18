@@ -1,28 +1,24 @@
-using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-
-    private Player _player;
     private Collider2D myCollider2D;
     private Vector3 _randomSpawnPosition;
     public GameObject slimePrefab;
     public GameObject explodyPrefab;
+
     private float slimeInterval = 10f;
     private float explodyInterval = 15f;
     public float minRadius;
     public float maxRadius;
     private float randomAngle;
-    private int maxSlimes = 8;
-    private int currentSlimes;
+    private int maxEnemies = 8;
+    private int currentEnemies;
     private void Awake()
     {
         myCollider2D = GetComponent<Collider2D>();
-        _player = GetComponentInParent<Player>();
     }
 
     private void OnEnable()
@@ -33,10 +29,18 @@ public class EnemySpawner : MonoBehaviour
     {
         Enemy.OnEnemyDestroyed -= WhenEnemyDestroyed;
     }
-
-    private void WhenEnemyDestroyed(Enemy enemy)
+    public void WhenEnemyDestroyed(Enemy.EnemyState enemyState)
     {
-        currentSlimes--;
+        switch (enemyState)
+        {
+            case Enemy.EnemyState.Alive:
+                currentEnemies++;
+                break;
+            
+            case Enemy.EnemyState.Dead:
+                currentEnemies--;
+                break;
+        }
     }
     private void Start()
     {
@@ -46,29 +50,30 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnExplody(float interval, GameObject enemy)
     {
-        while (true)
+        if (currentEnemies < maxRadius)
         {
-            yield return new WaitForSeconds(interval);
+            while (true)
+            {
+                yield return new WaitForSeconds(interval);
             
-            _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
-            Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
-            
+                _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
+                Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
+            }
         }
     }
     private IEnumerator SpawnSlimes(float interval, GameObject enemy)
     {
         while (true)
         {
-            while (currentSlimes < maxSlimes)
+            yield return new WaitForSeconds(interval);
+           
+            while (currentEnemies < maxEnemies)
             {
                 _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
-                currentSlimes++;
+                currentEnemies++;
             }
-
-            maxSlimes++;
-            
-            yield return new WaitForSeconds(interval);
+            maxEnemies++;
         }
     }
     private Vector3 RandomPointOnCircle(Bounds bounds)
@@ -85,11 +90,8 @@ public class EnemySpawner : MonoBehaviour
         }*/
         
         randomAngle = Random.Range(0, 360);  
-        print("normal"); 
-        
-          
-        
-       
+        print("normal");
+
         Vector2 randomPoint = new Vector2(
             Mathf.Cos(randomAngle),
             Mathf.Sin(randomAngle));

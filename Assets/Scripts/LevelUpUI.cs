@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public class LevelUpUi : MonoBehaviour
+public class LevelUpUI : MonoBehaviour
 {
     public GameObject levelUPUI;
-
+    public Player player;
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -22,13 +19,11 @@ public class LevelUpUi : MonoBehaviour
         switch (targetstate)
         {
             case GameStateManager.GameState.Playing:
-                levelUPUI.SetActive(false);
-                Time.timeScale = 1;
+                /*levelUPUI.SetActive(false);*/
                 break;
             
             case GameStateManager.GameState.LevelUP:
                 levelUPUI.SetActive(true);
-                Time.timeScale = 0;
                 break;
         }
     }
@@ -41,9 +36,5 @@ public class LevelUpUi : MonoBehaviour
     {
         
     }
-
-    public void chooseDamage()
-    {
-        
-    }
+    
 }

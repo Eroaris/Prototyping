@@ -3,14 +3,15 @@ using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
-{
-    public Enemy Instance;
-    public delegate void EnemyDestroyedDelegate(Enemy enemy);
+{ 
+    public delegate void EnemyDestroyedDelegate(EnemyState enemyState);
     public static event EnemyDestroyedDelegate OnEnemyDestroyed;
+    
     private SpriteRenderer _spriteRenderer; 
     public Rigidbody2D myRigidbody;
     public Vector3 _movement;
     public Transform target;
+
     public float speed;
     public float maxSpeed;
     private Vector2 maxVelocity;
@@ -49,14 +50,19 @@ public class Enemy : MonoBehaviour
             
             case GameStateManager.GameState.Lose:
                 break;
-            
         }
+    }
+    public enum EnemyState
+    {
+        Alive,
+        Dead
     }
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        OnEnemyDestroyed?.Invoke(EnemyState.Alive);
     }
     private void Start()
     {
@@ -110,8 +116,6 @@ public class Enemy : MonoBehaviour
 
         return _currentHp;
     }
-    
-
     public void ReceiveKnockback(Vector2 difference,float knockbackTime)
     {
         inKnockback = true;
@@ -128,7 +132,7 @@ public class Enemy : MonoBehaviour
     }  
     public void DestroySelf()
     {
-        OnEnemyDestroyed?.Invoke(this);
+        OnEnemyDestroyed?.Invoke(EnemyState.Dead);
         print("Enemy Killed");
         Destroy(gameObject);
     }

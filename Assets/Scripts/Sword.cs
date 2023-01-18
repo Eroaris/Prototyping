@@ -5,9 +5,9 @@ public class Sword : MonoBehaviour
 {
     private CircleCollider2D _myCollider2D;
     private SpriteRenderer _spriteRenderer;
+    
     private Vector3 _currentDirection;
     public Player player;
-    public LayerMask swordMask;
     public Vector2 difference;
     void Awake()
     {
@@ -25,7 +25,7 @@ public class Sword : MonoBehaviour
 
         transform.position = player.transform.position + _currentDirection * 1.5f;
 
-        if (player._cooldownTimer > 0)
+        /*if (player._cooldownTimer > 0)
         {
             player._cooldownTimer -= Time.deltaTime;
             _spriteRenderer.enabled = false;
@@ -42,7 +42,7 @@ public class Sword : MonoBehaviour
         {
             player._cooldownTimer = player.attackCooldown;
             player._attackDurationTimer = player.attackCooldown;
-        }
+        }*/
     }
 
     private void OnCollisionEnter2D(Collision2D col)

@@ -20,7 +20,7 @@ public class Timer : MonoBehaviour
 
         if (tmpTime <= 0)
         {
-            GameStateManager.Instance.SetCurrentState(GameStateManager.GameState.Lose);
+            GameStateManager.instance.SetCurrentState(GameStateManager.GameState.Lose);
         }
     }
     

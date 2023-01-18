@@ -6,7 +6,7 @@ public class GameStateManager : MonoBehaviour
 {
      public int targetFrameRate = 30;
 
-     public static GameStateManager Instance;
+     public static GameStateManager instance;
      public delegate void GameStateChangeDelegate(GameState targetState);
      public static event GameStateChangeDelegate OnGameStateChanged; 
     
@@ -16,9 +16,9 @@ public class GameStateManager : MonoBehaviour
          QualitySettings.vSyncCount = 0;
          Application.targetFrameRate = targetFrameRate;
              
-         if (Instance == null)
+         if (instance == null)
          {
-             Instance = this;
+             instance = this;
              DontDestroyOnLoad(gameObject);
          }
          else
@@ -53,11 +53,13 @@ public class GameStateManager : MonoBehaviour
                  OnGameStateChanged.Invoke(_currentState);
              }
          }
-         
          private void Start()
          {
              SetCurrentState(GameState.Ready);
-         }    
-         
+         } 
+         public void ResumeGame()
+         {
+             OnGameStateChanged?.Invoke(GameState.Playing);
+         }
          
 }

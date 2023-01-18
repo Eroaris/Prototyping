@@ -109,7 +109,7 @@ MonoBehaviour:
   attackCooldown: 0.8
   _cooldownTimer: 0
   _attackDurationTimer: 0.25
-  damage: 0
+  damage: 2
 --- !u!61 &4937059955239381592
 BoxCollider2D:
   m_ObjectHideFlags: 0
