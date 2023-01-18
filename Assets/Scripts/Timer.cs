@@ -37,7 +37,7 @@ public class Timer : MonoBehaviour
                 Time.timeScale = 1;
                 break;
             
-            case GameStateManager.GameState.Upgrade:
+            case GameStateManager.GameState.LevelUP:
                 Time.timeScale = 0;
                 break;
                 

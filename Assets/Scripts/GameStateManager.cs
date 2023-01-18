@@ -12,6 +12,7 @@ public class GameStateManager : MonoBehaviour
     
      private void Awake()
      {
+         SetCurrentState(GameState.Playing);
          QualitySettings.vSyncCount = 0;
          Application.targetFrameRate = targetFrameRate;
              
@@ -30,7 +31,7 @@ public class GameStateManager : MonoBehaviour
              Start,
              Ready,
              Playing,
-             Upgrade,
+             LevelUP,
              Pause,
              Win,
              Lose, 

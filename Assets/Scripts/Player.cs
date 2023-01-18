@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private Sword sword;
     public GameStateManager GSM;
     public Vector3 moveInput;
     public float speed = 4.5f;
@@ -10,7 +11,7 @@ public class Player : MonoBehaviour
     private float _lastHitTime;
     private const float IFrameDuration = 2;
     private int currentXP;
-    private int maxXP = 10;
+    public float maxXP = 10;
     public float knockBackPower = 1;
     public float knockBackTime = 0.5f;
     public float attackCooldown = 0.8f;
@@ -31,30 +32,21 @@ public class Player : MonoBehaviour
         Enemy.OnEnemyDestroyed += WhenEnemyDestroyed;
     }
 
-    private void WhenEnemyDestroyed(Enemy enemy)
+    public void WhenEnemyDestroyed(Enemy enemy)
     {
         currentXP++;
+        print(currentXP);
     }
 
     private void OnGameStateChanged(GameStateManager.GameState targetstate)
     {
         switch (targetstate)
         {
-            case GameStateManager.GameState.Start:
+            case GameStateManager.GameState.LevelUP:
+                maxXP *= 0.2f;
+                currentXP = 0;
                 break;
-
-            case GameStateManager.GameState.Ready:
-                break;
-
-            case GameStateManager.GameState.Playing:
-                break;
-
-            case GameStateManager.GameState.Upgrade:
-                break;
-
-            case GameStateManager.GameState.Pause:
-                break;
-
+            
             case GameStateManager.GameState.Win:
                 //cheer animation+vitory screen
                 break;
@@ -68,6 +60,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        sword = GetComponentInChildren<Sword>();
         _currentHp = health;
     }
 
@@ -78,14 +71,14 @@ public class Player : MonoBehaviour
         transform.position += moveInput.normalized * speed * Time.deltaTime;
         if (currentXP >= maxXP)
         {
-            LevelUp();  
+            GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
         }
     }
 
     private void LevelUp()
     {
             print("Level Up!");
-            int randomUpgrade = Random.Range(0,3);
+            int randomUpgrade = Random.Range(0,4);
 
             switch (randomUpgrade)
             {
@@ -104,8 +97,7 @@ public class Player : MonoBehaviour
                     break;
             }
 
-            maxXP += 5;
-            currentXP = 0;
+            
     }
 
     public int ApplyDamage(int damageAmount)
@@ -126,5 +118,11 @@ public class Player : MonoBehaviour
         }
 
         return _currentHp;
+    }
+    
+     private void OnTriggerEnter2D(Collider2D col)
+    {
+        var enemy = col.gameObject.GetComponent<Enemy>();
+        enemy.ReceiveKnockback(sword.difference, knockBackTime);
     }
 }

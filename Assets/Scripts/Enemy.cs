@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ public class Enemy : MonoBehaviour
     private float _lastHitTime;
     private const float IFrameDuration = 0.5f;
     private bool inKnockback;
+    public float spawnOffset = 0.2f;
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -36,7 +38,7 @@ public class Enemy : MonoBehaviour
             case GameStateManager.GameState.Playing:
                 break;
             
-            case GameStateManager.GameState.Upgrade:
+            case GameStateManager.GameState.LevelUP:
                 break;
                 
             case GameStateManager.GameState.Pause:
@@ -66,9 +68,24 @@ public class Enemy : MonoBehaviour
        myRigidbody.velocity += (Vector2) _movement.normalized * speed;
        if (myRigidbody.velocity.magnitude > maxSpeed && inKnockback == false)
        {
-          
            myRigidbody.velocity = Vector2.ClampMagnitude(myRigidbody.velocity, maxSpeed);
-           
+       }
+
+       if (transform.position.x <= -47)
+       {
+           transform.position = Vector3.left * spawnOffset;
+       }
+       if (transform.position.x >= 47)
+       {
+           transform.position = Vector3.right * spawnOffset;
+       }
+       if (transform.position.y <= -26)
+       {
+           transform.position = Vector3.up * spawnOffset;
+       }
+       if (transform.position.y >= 26)
+       {
+           transform.position = Vector3.down * spawnOffset;
        }
     }
     public int ApplyDamage(int damageAmount)
@@ -93,6 +110,7 @@ public class Enemy : MonoBehaviour
 
         return _currentHp;
     }
+    
 
     public void ReceiveKnockback(Vector2 difference,float knockbackTime)
     {
@@ -114,6 +132,5 @@ public class Enemy : MonoBehaviour
         print("Enemy Killed");
         Destroy(gameObject);
     }
-    
-    
+
 }

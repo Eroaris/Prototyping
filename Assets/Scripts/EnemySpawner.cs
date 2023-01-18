@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    
+
+    private Player _player;
     private Collider2D myCollider2D;
     private Vector3 _randomSpawnPosition;
     public GameObject slimePrefab;
@@ -15,11 +16,13 @@ public class EnemySpawner : MonoBehaviour
     private float explodyInterval = 15f;
     public float minRadius;
     public float maxRadius;
+    private float randomAngle;
     private int maxSlimes = 8;
     private int currentSlimes;
     private void Awake()
     {
         myCollider2D = GetComponent<Collider2D>();
+        _player = GetComponentInParent<Player>();
     }
 
     private void OnEnable()
@@ -47,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(interval);
             
-            _randomSpawnPosition = RandomPointonCircle(myCollider2D.bounds);
+            _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
             Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
             
         }
@@ -58,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
         {
             while (currentSlimes < maxSlimes)
             {
-                _randomSpawnPosition = RandomPointonCircle(myCollider2D.bounds);
+                _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
                 currentSlimes++;
             }
@@ -68,9 +71,25 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(interval);
         }
     }
-    private Vector3 RandomPointonCircle(Bounds bounds)
+    private Vector3 RandomPointOnCircle(Bounds bounds)
     {
-        float randomAngle = Random.Range(0, 360);
+        
+        /*if (_player.transform.position.x <= -29f)
+        {
+            randomAngle = Random.Range(0,180);
+        }
+
+        if (_player.transform.position.x >= 29f)
+        {
+            randomAngle = Random.Range(130,360);
+        }*/
+        
+        randomAngle = Random.Range(0, 360);  
+        print("normal"); 
+        
+          
+        
+       
         Vector2 randomPoint = new Vector2(
             Mathf.Cos(randomAngle),
             Mathf.Sin(randomAngle));

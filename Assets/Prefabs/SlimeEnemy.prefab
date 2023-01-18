@@ -105,6 +105,7 @@ MonoBehaviour:
   speed: 0.5
   maxSpeed: 2
   health: 3
+  spawnOffset: 0.2
 --- !u!50 &7840811381308100974
 Rigidbody2D:
   serializedVersion: 4
