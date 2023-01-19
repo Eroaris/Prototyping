@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.Serialization;
-
 public class Player : MonoBehaviour
 {
+    private oldsword _oldsword;
     private Sword sword;
     public GameStateManager GSM;
     private GameStateManager.GameState _gameState;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     public float attackCooldown = 0.8f;
     public float _cooldownTimer;
     public float _attackDurationTimer = 0.25f;
-    private float _attackDuration = 0.25f;
+    public float _attackDuration = 0.25f;
     public int damage ;
     
     private void OnEnable()
@@ -41,7 +41,6 @@ public class Player : MonoBehaviour
         {
             case Enemy.EnemyState.Dead:
                 currentXP++;
-                print(currentXP);
                 break;
         }
     }
@@ -71,7 +70,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        sword = GetComponentInChildren<Sword>();
+        _oldsword = GetComponentInChildren<oldsword>();
         _currentHealth = maxHealth;
     }
 
@@ -93,7 +92,7 @@ public class Player : MonoBehaviour
         {
             _currentHealth -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
-            print("Damage Taken!");
+            print("Damage Taken! HP left:"+_currentHealth);
         }
 
         if (_currentHealth <= 0)
@@ -105,14 +104,8 @@ public class Player : MonoBehaviour
 
         return _currentHealth;
     }
-    
-     private void OnTriggerEnter2D(Collider2D col)
-    {
-        var enemy = col.gameObject.GetComponent<Enemy>();
-        enemy.ReceiveKnockback(sword.difference, knockBackTime);
-    }
-     
-     public void UpgradeDamage()
+
+    public void UpgradeDamage()
      {
          if (canUpgrade)
          {

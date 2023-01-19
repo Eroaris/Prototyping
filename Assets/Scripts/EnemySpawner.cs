@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
     public float minRadius;
     public float maxRadius;
     private float randomAngle;
-    private int maxEnemies = 8;
+    public int maxEnemies = 8;
     private int currentEnemies;
     private void Awake()
     {
@@ -50,7 +50,7 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnExplody(float interval, GameObject enemy)
     {
-        if (currentEnemies < maxRadius)
+        if (currentEnemies < maxEnemies)
         {
             while (true)
             {
@@ -65,8 +65,6 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(interval);
-           
             while (currentEnemies < maxEnemies)
             {
                 _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
@@ -74,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
                 currentEnemies++;
             }
             maxEnemies++;
+            yield return new WaitForSeconds(interval);
         }
     }
     private Vector3 RandomPointOnCircle(Bounds bounds)

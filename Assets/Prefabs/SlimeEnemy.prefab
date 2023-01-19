@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7840811381308100968}
   - component: {fileID: 7840811381308100969}
   - component: {fileID: 7840811381308100970}
+  - component: {fileID: -3657440866425176334}
   - component: {fileID: 7840811381308100974}
   - component: {fileID: 7840811381308100975}
-  - component: {fileID: -3657440866425176334}
   m_Layer: 3
   m_Name: SlimeEnemy
   m_TagString: Enemy
@@ -98,14 +98,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273a0e070582f4f429b4132986549c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Instance: {fileID: 0}
   myRigidbody: {fileID: 0}
   _movement: {x: 0, y: 0, z: 0}
   target: {fileID: 0}
-  speed: 0.5
+  speed: 0.4
   maxSpeed: 2
   health: 3
   spawnOffset: 0.2
+--- !u!114 &-3657440866425176334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840811381308100964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c28a543230dfa934999c8a9a07355e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!50 &7840811381308100974
 Rigidbody2D:
   serializedVersion: 4
@@ -151,18 +163,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
---- !u!114 &-3657440866425176334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7840811381308100964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c28a543230dfa934999c8a9a07355e10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 1

@@ -62,7 +62,6 @@ public class Enemy : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        OnEnemyDestroyed?.Invoke(EnemyState.Alive);
     }
     private void Start()
     {
@@ -93,35 +92,33 @@ public class Enemy : MonoBehaviour
        {
            transform.position = Vector3.down * spawnOffset;
        }
+       OnEnemyDestroyed?.Invoke(EnemyState.Alive);
     }
     public int ApplyDamage(int damageAmount)
     {
         float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup)
         {
-            _spriteRenderer.color = Color.yellow;
+           
             _currentHp -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
         }
-        else
-        {
-            _spriteRenderer.color = Color.white;
-        }
-        
+
         if (_currentHp <= 0)
         {
             DestroySelf();
-            print("Enemy Killed");
         }
 
         return _currentHp;
     }
-    public void ReceiveKnockback(Vector2 difference,float knockbackTime)
+    /*public void ReceiveKnockback(Vector2 difference,float knockbackTime, Collider2D col)
     {
-        inKnockback = true;
-        myRigidbody.AddForce(difference, ForceMode2D.Impulse);
-        StartCoroutine(KnockbackCo(knockbackTime));
-        
+        if (col != null)
+        {
+            inKnockback = true;
+            myRigidbody.AddForce(difference, ForceMode2D.Impulse);
+            StartCoroutine(KnockbackCo(knockbackTime));
+        }
     }
     private IEnumerator KnockbackCo(float knockBackTime)
     {
@@ -129,7 +126,7 @@ public class Enemy : MonoBehaviour
         
         myRigidbody.velocity = Vector2.zero;
         inKnockback = false;
-    }  
+    }*/  
     public void DestroySelf()
     {
         OnEnemyDestroyed?.Invoke(EnemyState.Dead);

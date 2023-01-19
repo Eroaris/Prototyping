@@ -19,7 +19,7 @@ public class LevelUpUI : MonoBehaviour
         switch (targetstate)
         {
             case GameStateManager.GameState.Playing:
-                /*levelUPUI.SetActive(false);*/
+                levelUPUI.SetActive(false);
                 break;
             
             case GameStateManager.GameState.LevelUP:
@@ -27,14 +27,5 @@ public class LevelUpUI : MonoBehaviour
                 break;
         }
     }
-    void Start()
-    {
-       
-    }
-    
-    void Update()
-    {
-        
-    }
-    
+
 }

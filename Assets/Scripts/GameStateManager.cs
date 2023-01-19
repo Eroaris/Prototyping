@@ -55,7 +55,7 @@ public class GameStateManager : MonoBehaviour
          }
          private void Start()
          {
-             SetCurrentState(GameState.Ready);
+             SetCurrentState(GameState.Playing);
          } 
          public void ResumeGame()
          {
