@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject slimePrefab;
     public GameObject explodyPrefab;
 
+    public int healthIncrease; 
     private float slimeInterval = 10f;
     private float explodyInterval = 15f;
     public float minRadius;
@@ -34,13 +35,12 @@ public class EnemySpawner : MonoBehaviour
         switch (enemyState)
         {
             case Enemy.EnemyState.Alive:
-                currentEnemies++;
-                print(currentEnemies);
+               
                 break;
             
             case Enemy.EnemyState.Dead:
                 currentEnemies--;
-                print(currentEnemies);
+                
                 break;
         }
     }
@@ -52,9 +52,9 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnExplody(float interval, GameObject enemy)
     {
-        if (currentEnemies < maxEnemies)
+        while (true)
         {
-            while (true)
+            if (currentEnemies < maxEnemies)
             {
                 yield return new WaitForSeconds(interval);
             
@@ -67,13 +67,14 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(interval);
             while (currentEnemies < maxEnemies)
             {
                 _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
+                currentEnemies++;
             }
             maxEnemies++;
-            yield return new WaitForSeconds(interval);
         }
     }
     private Vector3 RandomPointOnCircle(Bounds bounds)
@@ -99,7 +100,6 @@ public class EnemySpawner : MonoBehaviour
         
        return randomPoint * radius;
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position,minRadius);

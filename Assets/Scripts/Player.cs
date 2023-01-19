@@ -53,9 +53,7 @@ public class Player : MonoBehaviour
                 break;
             
             case GameStateManager.GameState.LevelUP:
-                maxXP *= 0.2f;
-                currentXP = 0;
-                canUpgrade = true;
+                
                 break;
             
             case GameStateManager.GameState.Win:
@@ -82,8 +80,11 @@ public class Player : MonoBehaviour
         _gameState = GSM.GetCurrentState();
         if (currentXP >= maxXP)
         {
-            GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
             print(currentXP);
+            currentXP = 0;
+            maxXP *= 0.80f;
+            canUpgrade = true;
+            GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
         }
     }
     public int ApplyDamage(int damageAmount)
