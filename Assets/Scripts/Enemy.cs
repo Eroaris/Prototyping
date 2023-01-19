@@ -107,6 +107,7 @@ public class Enemy : MonoBehaviour
         if (_currentHp <= 0)
         {
             DestroySelf();
+            OnEnemyDestroyed?.Invoke(EnemyState.Dead);
         }
 
         return _currentHp;
@@ -127,9 +128,8 @@ public class Enemy : MonoBehaviour
         myRigidbody.velocity = Vector2.zero;
         inKnockback = false;
     }*/  
-    public void DestroySelf()
+   void DestroySelf()
     {
-        OnEnemyDestroyed?.Invoke(EnemyState.Dead);
         print("Enemy Killed");
         Destroy(gameObject);
     }

@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Default
+  m_Name: SlimeDefault
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,9 +20,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -869601726922240516, guid: 9986e182682f3984e8758a1f529bdd70, type: 3}
+      value: {fileID: 7300219061932726798, guid: d72b69341e7ef0b4f8c7b1300e32956f, type: 3}
     - time: 1
-      value: {fileID: 21300000, guid: 8795bf61846c3f9459d46fd0dfd4893d, type: 3}
+      value: {fileID: -3365320469631023704, guid: 9986e182682f3984e8758a1f529bdd70, type: 3}
+    - time: 1.0166667
+      value: {fileID: 7300219061932726798, guid: d72b69341e7ef0b4f8c7b1300e32956f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -42,14 +44,15 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -869601726922240516, guid: 9986e182682f3984e8758a1f529bdd70, type: 3}
-    - {fileID: 21300000, guid: 8795bf61846c3f9459d46fd0dfd4893d, type: 3}
+    - {fileID: 7300219061932726798, guid: d72b69341e7ef0b4f8c7b1300e32956f, type: 3}
+    - {fileID: -3365320469631023704, guid: 9986e182682f3984e8758a1f529bdd70, type: 3}
+    - {fileID: 7300219061932726798, guid: d72b69341e7ef0b4f8c7b1300e32956f, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.0166667
+    m_StopTime: 1.0333333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

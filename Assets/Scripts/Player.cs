@@ -2,10 +2,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 public class Player : MonoBehaviour
 {
-    private oldsword _oldsword;
     private Sword sword;
     public GameStateManager GSM;
     private GameStateManager.GameState _gameState;
+    public Animator anim;
    
     public Vector3 moveInput;
     public bool canUpgrade;
@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
     public float _cooldownTimer;
     public float _attackDurationTimer = 0.25f;
     public float _attackDuration = 0.25f;
-    public int damage ;
+    public int damage;
+    
     
     private void OnEnable()
     {
@@ -68,7 +69,8 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        _oldsword = GetComponentInChildren<oldsword>();
+        sword = GetComponentInChildren<Sword>();
+        anim = GetComponent<Animator>();
         _currentHealth = maxHealth;
     }
 
@@ -77,6 +79,9 @@ public class Player : MonoBehaviour
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         transform.position += moveInput.normalized * speed * Time.deltaTime;
+        
+        Animate();
+        
         _gameState = GSM.GetCurrentState();
         if (currentXP >= maxXP)
         {
@@ -106,16 +111,7 @@ public class Player : MonoBehaviour
 
         return _currentHealth;
     }
-
-    public void UpgradeDamage()
-     {
-         if (canUpgrade)
-         {
-             damage += 1;
-             print("Damage:" + damage);
-             GSM.SetCurrentState(GameStateManager.GameState.Ready);
-         }
-     }
+    
      public void UpgradeHealth()
      {
          if (canUpgrade)
@@ -135,5 +131,10 @@ public class Player : MonoBehaviour
              print("Movespeed:" + speed);
              GSM.SetCurrentState(GameStateManager.GameState.Ready);
          }
+     }
+     void Animate()
+     {
+         anim.SetFloat("AnimMoveX",moveInput.x);
+         anim.SetFloat("AnimMoveY",moveInput.y);
      }
 }

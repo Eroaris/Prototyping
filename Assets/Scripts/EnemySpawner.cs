@@ -9,8 +9,8 @@ public class EnemySpawner : MonoBehaviour
     public GameObject slimePrefab;
     public GameObject explodyPrefab;
 
-    public int healthIncrease; 
-    private float slimeInterval = 10f;
+    public int healthIncrease;
+    private float slimeInterval = 1f;
     private float explodyInterval = 15f;
     public float minRadius;
     public float maxRadius;
@@ -73,6 +73,7 @@ public class EnemySpawner : MonoBehaviour
                 _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
                 currentEnemies++;
+                interval = 10f;
             }
             maxEnemies++;
         }
