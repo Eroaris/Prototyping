@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
         if (currentXP >= maxXP)
         {
             GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
+            print(currentXP);
         }
     }
     public int ApplyDamage(int damageAmount)

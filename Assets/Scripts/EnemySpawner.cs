@@ -35,10 +35,12 @@ public class EnemySpawner : MonoBehaviour
         {
             case Enemy.EnemyState.Alive:
                 currentEnemies++;
+                print(currentEnemies);
                 break;
             
             case Enemy.EnemyState.Dead:
                 currentEnemies--;
+                print(currentEnemies);
                 break;
         }
     }
@@ -69,7 +71,6 @@ public class EnemySpawner : MonoBehaviour
             {
                 _randomSpawnPosition = RandomPointOnCircle(myCollider2D.bounds);
                 Instantiate(enemy, _randomSpawnPosition + transform.position, Quaternion.identity);
-                currentEnemies++;
             }
             maxEnemies++;
             yield return new WaitForSeconds(interval);
@@ -88,8 +89,7 @@ public class EnemySpawner : MonoBehaviour
             randomAngle = Random.Range(130,360);
         }*/
         
-        randomAngle = Random.Range(0, 360);  
-        print("normal");
+        randomAngle = Random.Range(0, 360);
 
         Vector2 randomPoint = new Vector2(
             Mathf.Cos(randomAngle),

@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         _currentHp = health;
+        OnEnemyDestroyed?.Invoke(EnemyState.Alive);
     } 
     void FixedUpdate()
     {
@@ -92,7 +93,6 @@ public class Enemy : MonoBehaviour
        {
            transform.position = Vector3.down * spawnOffset;
        }
-       OnEnemyDestroyed?.Invoke(EnemyState.Alive);
     }
     public int ApplyDamage(int damageAmount)
     {

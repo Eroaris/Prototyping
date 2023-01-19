@@ -103,7 +103,7 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 0.4
   maxSpeed: 2
-  health: 3
+  health: 1
   spawnOffset: 0.2
 --- !u!114 &-3657440866425176334
 MonoBehaviour:
