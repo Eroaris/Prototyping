@@ -2,7 +2,6 @@ using UnityEngine;
 public class LevelUpUI : MonoBehaviour
 {
     public GameObject levelUPUI;
-    public Player player;
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;

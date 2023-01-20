@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.Serialization;
+using TMPro;
 public class Player : MonoBehaviour
 {
     private Sword sword;
     public GameStateManager GSM;
-    private GameStateManager.GameState _gameState;
     public Animator anim;
+    public TextMeshProUGUI xptext;
    
     public Vector3 moveInput;
     public bool canUpgrade;
@@ -23,17 +24,18 @@ public class Player : MonoBehaviour
     public float _attackDurationTimer = 0.25f;
     public float _attackDuration = 0.25f;
     public int damage;
-    
-    
+    public float xpGrowth = 1.20f;
+
+
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
-        Enemy.OnEnemyDestroyed -= WhenEnemyDestroyed;
+        Enemy.OnEnemyDestroyed += WhenEnemyDestroyed;
     }
     private void OnDisable()
     {
         GameStateManager.OnGameStateChanged -= OnGameStateChanged;
-        Enemy.OnEnemyDestroyed += WhenEnemyDestroyed;
+        Enemy.OnEnemyDestroyed -= WhenEnemyDestroyed;
     }
 
     public void WhenEnemyDestroyed(Enemy.EnemyState enemyState)
@@ -42,6 +44,7 @@ public class Player : MonoBehaviour
         {
             case Enemy.EnemyState.Dead:
                 currentXP++;
+                xptext.text = "XP needed:" + currentXP;
                 break;
         }
     }
@@ -54,7 +57,9 @@ public class Player : MonoBehaviour
                 break;
             
             case GameStateManager.GameState.LevelUP:
-                
+                currentXP = 0;
+                maxXP *= xpGrowth;
+                canUpgrade = true;
                 break;
             
             case GameStateManager.GameState.Win:
@@ -78,17 +83,14 @@ public class Player : MonoBehaviour
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
-        transform.position += moveInput.normalized * speed * Time.deltaTime;
         
+        transform.position += moveInput.normalized * speed * Time.deltaTime;
+
         Animate();
         
-        _gameState = GSM.GetCurrentState();
+        xptext.text = currentXP+ "/"+ maxXP + "XP";
         if (currentXP >= maxXP)
         {
-            print(currentXP);
-            currentXP = 0;
-            maxXP *= 0.80f;
-            canUpgrade = true;
             GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
         }
     }
@@ -111,13 +113,22 @@ public class Player : MonoBehaviour
 
         return _currentHealth;
     }
+
+    public void UpgradeDamage()
+    {
+        if (canUpgrade)
+        {
+            damage++;
+            print("Current Damage:"+damage);
+        }
+    }
     
-     public void UpgradeHealth()
+    public void UpgradeHealth()
      {
          if (canUpgrade)
          {
-             _currentHealth += 1;
-             maxHealth += 1;
+             _currentHealth++;
+             maxHealth++;
              print("Max Health:"+ maxHealth);
              print("Current Health:" + _currentHealth);
              GSM.SetCurrentState(GameStateManager.GameState.Ready);

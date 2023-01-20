@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
     } 
     void FixedUpdate()
     {
-       _movement = target.transform.position - transform.position;
+        _movement = target.transform.position - transform.position;
        myRigidbody.velocity += (Vector2) _movement.normalized * speed;
        if (myRigidbody.velocity.magnitude > maxSpeed && inKnockback == false)
        {
@@ -99,7 +99,6 @@ public class Enemy : MonoBehaviour
         float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup)
         {
-           
             _currentHp -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
         }

@@ -24,7 +24,7 @@ public class ExplodyEnemy : MonoBehaviour
             explosionTimer -= Time.deltaTime;
             if (explosionTimer <= 0)
             {
-                Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 2f, explodyMask);
+                Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 1.5f, explodyMask);
 
                 foreach (var collider2D in hits)
                 {

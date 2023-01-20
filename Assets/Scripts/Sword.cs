@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    private CircleCollider2D _myCollider2D;
+    private CapsuleCollider2D _myCollider2D;
     private SpriteRenderer _spriteRenderer;
-    public Animator anim;
+    private Animator anim;
     
     private Vector3 _currentDirection;
     public Player player;
@@ -13,7 +13,7 @@ public class Sword : MonoBehaviour
     void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _myCollider2D = GetComponent<CircleCollider2D>();
+        _myCollider2D = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
         player._cooldownTimer = player.attackCooldown;
     }
@@ -25,10 +25,11 @@ public class Sword : MonoBehaviour
             _currentDirection = player.moveInput;
         }
 
-        transform.position = player.transform.position + _currentDirection * 1.5f;
-        
+        //transform.position = player.transform.position + _currentDirection * 1.5f;
+        _myCollider2D.enabled = !_myCollider2D.enabled;
         Animate();
 
+        /*
         if (player._cooldownTimer > 0)
         {
             player._cooldownTimer -= Time.deltaTime;
@@ -42,12 +43,12 @@ public class Sword : MonoBehaviour
         {
             player._cooldownTimer = player.attackCooldown;
             player._attackDurationTimer = player.attackCooldown;
-        }
+        }*/
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        var enemy = col.gameObject.GetComponent<Enemy>();
+        var enemy = col.gameObject.GetComponentInParent<Enemy>();
 
             if (enemy != null)
             {
@@ -59,7 +60,7 @@ public class Sword : MonoBehaviour
     } 
     void Animate()
     {
-        anim.SetFloat("AnimMoveX",player.moveInput.x);
-        anim.SetFloat("AnimMoveY",player.moveInput.y);
+        anim.SetFloat("AnimMoveX",_currentDirection.x);
+        anim.SetFloat("AnimMoveY",_currentDirection.y);
     }
 }
