@@ -24,13 +24,12 @@ public class Sword : MonoBehaviour
         {
             _currentDirection = player.moveInput;
         }
-
-        //transform.position = player.transform.position + _currentDirection * 1.5f;
+        
         _myCollider2D.enabled = !_myCollider2D.enabled;
         Animate();
 
-        /*
-        if (player._cooldownTimer > 0)
+        
+        /*if (player._cooldownTimer > 0)
         {
             player._cooldownTimer -= Time.deltaTime;
 
@@ -53,9 +52,9 @@ public class Sword : MonoBehaviour
             if (enemy != null)
             {
                 enemy.ApplyDamage(player.damage);
-                /*difference = enemy.transform.position - transform.position;
+                difference = enemy.transform.position - player.transform.position;
                 difference = difference.normalized * player.knockBackPower;
-                enemy.ReceiveKnockback(difference, player.knockBackTime, col);*/
+                enemy.ReceiveKnockback(difference, player.knockBackTime, col);
             }
     } 
     void Animate()

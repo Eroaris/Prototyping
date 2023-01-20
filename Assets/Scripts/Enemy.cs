@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
     {
         _currentHp = health;
         OnEnemyDestroyed?.Invoke(EnemyState.Alive);
+        inKnockback = false;
     } 
     void FixedUpdate()
     {
@@ -100,6 +101,7 @@ public class Enemy : MonoBehaviour
         if (check < Time.realtimeSinceStartup)
         {
             _currentHp -= damageAmount;
+            StartCoroutine(FlashOnDamage(IFrameDuration));
             _lastHitTime = Time.realtimeSinceStartup;
         }
 
@@ -111,22 +113,33 @@ public class Enemy : MonoBehaviour
 
         return _currentHp;
     }
-    /*public void ReceiveKnockback(Vector2 difference,float knockbackTime, Collider2D col)
+
+    private IEnumerator FlashOnDamage(float FlashDuration)
     {
-        if (col != null)
+        _spriteRenderer.color = new Color(0.8235294f, 0.375534f,0.375534f,1);
+        
+        yield return new WaitForSeconds(FlashDuration);
+        
+        _spriteRenderer.color = Color.white;
+    }
+    public void ReceiveKnockback(Vector2 difference,float knockbackTime, Collider2D col)
+    {
+        if (col != null )
         {
-            inKnockback = true;
-            myRigidbody.AddForce(difference, ForceMode2D.Impulse);
-            StartCoroutine(KnockbackCo(knockbackTime));
+            if (inKnockback == false)
+            {
+                inKnockback = true;
+                myRigidbody.AddForce(difference, ForceMode2D.Impulse);
+                StartCoroutine(KnockbackCo(knockbackTime));
+            }
         }
     }
     private IEnumerator KnockbackCo(float knockBackTime)
     {
         yield return new WaitForSeconds(knockBackTime);
-        
         myRigidbody.velocity = Vector2.zero;
         inKnockback = false;
-    }*/  
+    }  
    void DestroySelf()
     {
         print("Enemy Killed");
