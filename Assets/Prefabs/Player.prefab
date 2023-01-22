@@ -100,16 +100,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GSM: {fileID: 0}
+  anim: {fileID: 0}
+  xptext: {fileID: 0}
   moveInput: {x: 0, y: 0, z: 0}
+  canUpgrade: 0
   speed: 3
-  health: 3
-  maxXP: 1
+  maxHealth: 3
+  maxXP: 5
   knockBackPower: 1
   knockBackTime: 0.5
   attackCooldown: 0.8
   _cooldownTimer: 0
   _attackDurationTimer: 0.25
+  _attackDuration: 0.25
   damage: 2
+  xpGrowth: 1.2
 --- !u!61 &4937059955239381592
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -338,8 +343,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slimePrefab: {fileID: 7840811381308100964, guid: 5d45fc5e391a9744eae5e0310644c4fa, type: 3}
   explodyPrefab: {fileID: 4938267573990366677, guid: a2ec4ce17c7c69e489623e2d69920f36, type: 3}
+  healthIncrease: 0
   minRadius: 13.4
   maxRadius: 16.5
+  maxEnemies: 8
 --- !u!61 &4937059955735340315
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     public Rigidbody2D myRigidbody;
     public Vector3 _movement;
     public Transform target;
+    public Animator anim;
 
     public float speed;
     public float maxSpeed;
@@ -62,6 +63,7 @@ public class Enemy : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        anim = GetComponent<Animator>();
     }
     private void Start()
     {
@@ -107,8 +109,7 @@ public class Enemy : MonoBehaviour
 
         if (_currentHp <= 0)
         {
-            DestroySelf();
-            OnEnemyDestroyed?.Invoke(EnemyState.Dead);
+            Death();
         }
 
         return _currentHp;
@@ -144,6 +145,12 @@ public class Enemy : MonoBehaviour
     {
         print("Enemy Killed");
         Destroy(gameObject);
+        OnEnemyDestroyed?.Invoke(EnemyState.Dead);
     }
 
+   void Death()
+   {
+       anim.SetTrigger("Death");
+       DestroySelf();
+   }
 }

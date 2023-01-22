@@ -3,11 +3,10 @@ using UnityEngine.Serialization;
 using TMPro;
 public class Player : MonoBehaviour
 {
-    private Sword sword;
     public GameStateManager GSM;
     public Animator anim;
     public TextMeshProUGUI xptext;
-   
+
     public Vector3 moveInput;
     public bool canUpgrade;
     public float speed = 4.5f;
@@ -20,12 +19,9 @@ public class Player : MonoBehaviour
     public float knockBackPower = 1;
     public float knockBackTime = 0.5f;
     public float attackCooldown = 0.8f;
-    public float _cooldownTimer;
-    public float _attackDurationTimer = 0.25f;
-    public float _attackDuration = 0.25f;
     public int damage;
-    public float xpGrowth = 1.20f;
-
+    public float xpGrowth = 3;
+    
 
     private void OnEnable()
     {
@@ -52,13 +48,9 @@ public class Player : MonoBehaviour
     {
         switch (targetstate)
         {
-            case GameStateManager.GameState.Ready:
-                canUpgrade = false;
-                break;
-            
             case GameStateManager.GameState.LevelUP:
                 currentXP = 0;
-                maxXP *= xpGrowth;
+                maxXP += xpGrowth;
                 canUpgrade = true;
                 break;
             
@@ -74,20 +66,18 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        sword = GetComponentInChildren<Sword>();
         anim = GetComponent<Animator>();
         _currentHealth = maxHealth;
+        canUpgrade = false;
     }
 
     void Update()
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
-        
         transform.position += moveInput.normalized * speed * Time.deltaTime;
-
         Animate();
-        
+
         xptext.text = currentXP+ "/"+ maxXP + "XP";
         if (currentXP >= maxXP)
         {
@@ -120,6 +110,8 @@ public class Player : MonoBehaviour
         {
             damage++;
             print("Current Damage:"+damage);
+            canUpgrade = false;
+            GSM.SetCurrentState(GameStateManager.GameState.Playing);
         }
     }
     
@@ -131,7 +123,8 @@ public class Player : MonoBehaviour
              maxHealth++;
              print("Max Health:"+ maxHealth);
              print("Current Health:" + _currentHealth);
-             GSM.SetCurrentState(GameStateManager.GameState.Ready);
+             canUpgrade = false;
+             GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
      }
      public void UpgradeSpeed()
@@ -140,9 +133,20 @@ public class Player : MonoBehaviour
          {
              speed += 0.25f;
              print("Movespeed:" + speed);
-             GSM.SetCurrentState(GameStateManager.GameState.Ready);
+             canUpgrade = false;
+             GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
      }
+     
+     void OnTriggerStay(Collider other)
+     {
+         if (other.CompareTag("Goal"))
+         {
+             Goal goal = GetComponent<Goal>();
+             goal.completeGoal();
+         }
+     }
+     
      void Animate()
      {
          anim.SetFloat("AnimMoveX",moveInput.x);

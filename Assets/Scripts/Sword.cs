@@ -6,16 +6,40 @@ public class Sword : MonoBehaviour
     private CapsuleCollider2D _myCollider2D;
     private SpriteRenderer _spriteRenderer;
     private Animator anim;
+    public GameStateManager GSM;
     
     private Vector3 _currentDirection;
+    public bool canUpgrade;
     public Player player;
     public Vector2 difference;
+    private float swordLength;
+    
+    private void OnEnable()
+    {
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+    }
+    private void OnDisable()
+    {
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+   
+    private void OnGameStateChanged(GameStateManager.GameState targetstate)
+    {
+        switch (targetstate)
+        {
+            case GameStateManager.GameState.LevelUP:
+                canUpgrade = true;
+                break;
+            
+        }
+    }
     void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _myCollider2D = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
-        player._cooldownTimer = player.attackCooldown;
+        swordLength = transform.localScale.x;
+        canUpgrade = false;
     }
 
     void Update()
@@ -27,22 +51,6 @@ public class Sword : MonoBehaviour
         
         _myCollider2D.enabled = !_myCollider2D.enabled;
         Animate();
-
-        
-        /*if (player._cooldownTimer > 0)
-        {
-            player._cooldownTimer -= Time.deltaTime;
-
-        }
-        else if (player._attackDurationTimer > 0)
-        {
-            player._attackDurationTimer -= Time.deltaTime;
-        }
-        else
-        {
-            player._cooldownTimer = player.attackCooldown;
-            player._attackDurationTimer = player.attackCooldown;
-        }*/
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -57,6 +65,17 @@ public class Sword : MonoBehaviour
                 enemy.ReceiveKnockback(difference, player.knockBackTime, col);
             }
     } 
+    
+    public void UpgradeRange()
+    {
+        if (canUpgrade)
+        {
+            swordLength *= 1.5f;
+            print(swordLength);
+            canUpgrade = false;
+            GSM.SetCurrentState(GameStateManager.GameState.Playing);
+        }
+    }
     void Animate()
     {
         anim.SetFloat("AnimMoveX",_currentDirection.x);

@@ -27,7 +27,10 @@ public class SlimeEnemy : MonoBehaviour
     }
     void Animate()
     {
-        anim.SetFloat("SlimeAnimX",_enemy.myRigidbody.velocity.x);
-        anim.SetFloat("SlimeAnimY",_enemy.myRigidbody.velocity.y);
+        if (anim.enabled)
+        {
+            anim.SetFloat("SlimeAnimX",_enemy.myRigidbody.velocity.x);
+            anim.SetFloat("SlimeAnimY",_enemy.myRigidbody.velocity.y);
+        }
     }
 }
