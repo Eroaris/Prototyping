@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour
     private const float IFrameDuration = 0.5f;
     private bool inKnockback;
     public float spawnOffset = 0.2f;
+    private bool isDying;
+    
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -34,23 +36,7 @@ public class Enemy : MonoBehaviour
     {
         switch (targetstate)
         {
-            case GameStateManager.GameState.Ready:
-                break;
             
-            case GameStateManager.GameState.Playing:
-                break;
-            
-            case GameStateManager.GameState.LevelUP:
-                break;
-                
-            case GameStateManager.GameState.Pause:
-                break;
-            
-            case GameStateManager.GameState.Win:
-                break;
-            
-            case GameStateManager.GameState.Lose:
-                break;
         }
     }
     public enum EnemyState
@@ -64,6 +50,7 @@ public class Enemy : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         anim = GetComponent<Animator>();
+        isDying = false;
     }
     private void Start()
     {
@@ -100,7 +87,7 @@ public class Enemy : MonoBehaviour
     public int ApplyDamage(int damageAmount)
     {
         float check = _lastHitTime + IFrameDuration;
-        if (check < Time.realtimeSinceStartup)
+        if (check < Time.realtimeSinceStartup && isDying == false)
         {
             _currentHp -= damageAmount;
             StartCoroutine(FlashOnDamage(IFrameDuration));
@@ -127,7 +114,7 @@ public class Enemy : MonoBehaviour
     {
         if (col != null )
         {
-            if (inKnockback == false)
+            if (inKnockback == false && isDying == false)
             {
                 inKnockback = true;
                 myRigidbody.AddForce(difference, ForceMode2D.Impulse);
@@ -151,6 +138,7 @@ public class Enemy : MonoBehaviour
    void Death()
    {
        anim.SetTrigger("Death");
-       DestroySelf();
+       isDying = true;
+       Invoke(nameof(DestroySelf),0.5f);
    }
 }

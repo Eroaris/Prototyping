@@ -4,6 +4,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     public GameStateManager GSM;
+    public GameObject levelUPUI;
     public Animator anim;
     public Animator swordAnim;
 
@@ -49,10 +50,15 @@ public class Player : MonoBehaviour
     {
         switch (targetstate)
         {
+            case GameStateManager.GameState.Playing:
+                levelUPUI.SetActive(false);
+                break;
+            
             case GameStateManager.GameState.LevelUP:
                 currentXP = 0;
                 maxXP += xpGrowth;
                 canUpgrade = true;
+                levelUPUI.SetActive(true);
                 break;
             
             case GameStateManager.GameState.Win:
@@ -60,7 +66,7 @@ public class Player : MonoBehaviour
                 break;
 
             case GameStateManager.GameState.Lose:
-                //death animation+game over
+                anim.SetBool("Dying",true);
                 break;
         }
     }
@@ -153,7 +159,7 @@ public class Player : MonoBehaviour
      {
          if (canUpgrade)
          {
-             attackCooldown *= 0.9f;
+             attackCooldown *= 0.85f;
              print(attackCooldown);
              canUpgrade = false;
              GSM.SetCurrentState(GameStateManager.GameState.Playing);

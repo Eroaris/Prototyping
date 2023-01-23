@@ -7,11 +7,14 @@ using TMPro;
 public class Goal : MonoBehaviour
 {
     public TextMeshProUGUI goalText;
+    public GameStateManager GSM;
+    
     Color lerpedColor;
     private SpriteRenderer _spriteRenderer;
     float goalTime = 60f; 
     float timePassed = 0;
     private bool playerInside;
+    
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();

@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 _randomSpawnPosition;
     public GameObject slimePrefab;
     public GameObject explodyPrefab;
+    
 
     public int healthIncrease;
     private float slimeInterval = 1f;
@@ -40,14 +41,13 @@ public class EnemySpawner : MonoBehaviour
             
             case Enemy.EnemyState.Dead:
                 currentEnemies--;
-                
                 break;
         }
     }
     private void Start()
     {
         StartCoroutine(SpawnSlimes(slimeInterval,slimePrefab));
-        StartCoroutine(SpawnExplody(explodyInterval, explodyPrefab ));
+        /*StartCoroutine(SpawnExplody(explodyInterval, explodyPrefab ));*/
     }
 
     private IEnumerator SpawnExplody(float interval, GameObject enemy)

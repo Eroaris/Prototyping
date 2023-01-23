@@ -4,10 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 public class XpBar : MonoBehaviour
 {
-  
+    public GameStateManager GSM;
     private Player player;
     public Image mask;
     public float fillAmount;
+   
+    private void OnEnable()
+    {
+        GameStateManager.OnGameStateChanged += OnGameStateChanged;
+    }
+    private void OnDisable()
+    {
+        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameStateManager.GameState targetstate)
+    {
+        switch (targetstate)
+        {
+            case GameStateManager.GameState.LevelUP:
+                fillAmount = 0;
+                break;
+            
+        }
+    }
     void Awake()
     {
        player=GetComponentInParent<Player>();
@@ -21,9 +41,5 @@ public class XpBar : MonoBehaviour
     {
         fillAmount = player.currentXP / player.maxXP;
         mask.fillAmount = fillAmount;
-        if (player.currentXP >= player.maxXP)
-        {
-            fillAmount = 0;
-        }
     }
 }
