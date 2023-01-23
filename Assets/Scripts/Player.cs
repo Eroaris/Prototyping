@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     public GameStateManager GSM;
     public Animator anim;
-    public TextMeshProUGUI xptext;
+    public Animator swordAnim;
 
     public Vector3 moveInput;
     public bool canUpgrade;
@@ -14,13 +14,15 @@ public class Player : MonoBehaviour
     private int _currentHealth;
     private float _lastHitTime;
     private const float IFrameDuration = 2;
-    private int currentXP;
+    public int currentXP;
     public float maxXP = 10;
     public float knockBackPower = 1;
-    public float knockBackTime = 0.5f;
-    public float attackCooldown = 0.8f;
+    public float knockBackTime;
+    public float attackCooldown;
+    public float _cooldownTimer = 0.5f;
     public int damage;
     public float xpGrowth = 3;
+    private bool isInCooldown;
     
 
     private void OnEnable()
@@ -40,7 +42,6 @@ public class Player : MonoBehaviour
         {
             case Enemy.EnemyState.Dead:
                 currentXP++;
-                xptext.text = "XP needed:" + currentXP;
                 break;
         }
     }
@@ -68,7 +69,9 @@ public class Player : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         _currentHealth = maxHealth;
+        _cooldownTimer = attackCooldown;
         canUpgrade = false;
+        swordAnim.speed = 0.75f;
     }
 
     void Update()
@@ -77,13 +80,20 @@ public class Player : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         transform.position += moveInput.normalized * speed * Time.deltaTime;
         Animate();
-
-        xptext.text = currentXP+ "/"+ maxXP + "XP";
+        
         if (currentXP >= maxXP)
         {
             GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
         }
+
+        isInCooldown = _cooldownTimer > 0;
+        if (isInCooldown)
+        {
+            _cooldownTimer -= Time.deltaTime;   
+        }
+       swordAnim.SetBool("InCooldown",isInCooldown);
     }
+
     public int ApplyDamage(int damageAmount)
     {
         float check = _lastHitTime + IFrameDuration;
@@ -110,6 +120,7 @@ public class Player : MonoBehaviour
         {
             damage++;
             print("Current Damage:"+damage);
+            print(Time.timeScale);
             canUpgrade = false;
             GSM.SetCurrentState(GameStateManager.GameState.Playing);
         }
@@ -137,16 +148,17 @@ public class Player : MonoBehaviour
              GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
      }
-     
-     void OnTriggerStay(Collider other)
+
+     public void UpgradeAttackSpeed()
      {
-         if (other.CompareTag("Goal"))
+         if (canUpgrade)
          {
-             Goal goal = GetComponent<Goal>();
-             goal.completeGoal();
+             attackCooldown *= 0.9f;
+             print(attackCooldown);
+             canUpgrade = false;
+             GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
      }
-     
      void Animate()
      {
          anim.SetFloat("AnimMoveX",moveInput.x);

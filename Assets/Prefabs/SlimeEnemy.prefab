@@ -77,7 +77,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: a3decb7cfdf86084c8dda8ef2018f206, type: 3}
   m_Color: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 1}
   m_FlipX: 0
@@ -170,6 +170,7 @@ MonoBehaviour:
   myRigidbody: {fileID: 0}
   _movement: {x: 0, y: 0, z: 0}
   target: {fileID: 0}
+  anim: {fileID: 0}
   speed: 0.4
   maxSpeed: 2
   health: 5

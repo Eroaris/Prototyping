@@ -14,6 +14,7 @@ public class Sword : MonoBehaviour
     public Vector2 difference;
     private float swordLength;
     
+    
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -76,6 +77,11 @@ public class Sword : MonoBehaviour
             GSM.SetCurrentState(GameStateManager.GameState.Playing);
         }
     }
+    
+    public void resetAttack()
+    {
+        player._cooldownTimer =  player.attackCooldown;
+    }  
     void Animate()
     {
         anim.SetFloat("AnimMoveX",_currentDirection.x);
