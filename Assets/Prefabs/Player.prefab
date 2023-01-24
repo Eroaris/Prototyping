@@ -284,12 +284,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566004491}
-  m_LocalRotation: {x: 0, y: 0, z: -0.6330161, w: 0.7741387}
+  m_LocalRotation: {x: -0, y: -0, z: -0.6330161, w: 0.7741387}
   m_LocalPosition: {x: -1.93, y: 1.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4937059955239381599}
-  m_RootOrder: 2
+  m_Father: {fileID: 5835895578386267684}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -78.546}
 --- !u!212 &1566004495
 SpriteRenderer:
@@ -527,7 +527,7 @@ Transform:
   m_Children:
   - {fileID: 4937059955735340313}
   - {fileID: 4937059955453249389}
-  - {fileID: 1566004492}
+  - {fileID: 5835895578386267684}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -602,14 +602,15 @@ MonoBehaviour:
   canUpgrade: 0
   speed: 3
   maxHealth: 5
+  healthtext: {fileID: 0}
   currentXP: 0
-  maxXP: 1
+  maxXP: 2
   knockBackPower: 10
   knockBackTime: 0.5
   attackCooldown: 1
   _cooldownTimer: 0
-  damage: 5
-  xpGrowth: 3
+  damage: 2
+  xpGrowth: 4
 --- !u!61 &4937059955239381592
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -888,3 +889,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &6970132570884725638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5835895578386267684}
+  m_Layer: 6
+  m_Name: swordHilt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5835895578386267684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6970132570884725638}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1566004492}
+  m_Father: {fileID: 4937059955239381599}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

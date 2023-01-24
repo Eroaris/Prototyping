@@ -16,29 +16,20 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float maxSpeed;
     private Vector2 maxVelocity;
-    public int health = 3;
-    private int _currentHp;
+    
+    public int baseHealth = 3;
+    private float healthIncrease;
+    private float maxHP;
+    private float _currentHp;
+   
     private float _lastHitTime;
     private const float IFrameDuration = 0.5f;
+   
+    private bool isDying;
     private bool inKnockback;
     public float spawnOffset = 0.2f;
-    private bool isDying;
     
-    private void OnEnable()
-    {
-        GameStateManager.OnGameStateChanged += OnGameStateChanged;
-    }
-    private void OnDisable()
-    {
-        GameStateManager.OnGameStateChanged -= OnGameStateChanged;
-    }
-    private void OnGameStateChanged(GameStateManager.GameState targetstate)
-    {
-        switch (targetstate)
-        {
-            
-        }
-    }
+    
     public enum EnemyState
     {
         Alive,
@@ -51,10 +42,13 @@ public class Enemy : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         anim = GetComponent<Animator>();
         isDying = false;
+        healthIncrease = Time.time / 30;
+        healthIncrease = Mathf.Floor(healthIncrease);
+        maxHP = healthIncrease + baseHealth;
     }
     private void Start()
     {
-        _currentHp = health;
+        _currentHp = maxHP;
         OnEnemyDestroyed?.Invoke(EnemyState.Alive);
         inKnockback = false;
     } 
@@ -84,7 +78,7 @@ public class Enemy : MonoBehaviour
            transform.position = Vector3.down * spawnOffset;
        }
     }
-    public int ApplyDamage(int damageAmount)
+    public void ApplyDamage(int damageAmount)
     {
         float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup && isDying == false)
@@ -98,10 +92,7 @@ public class Enemy : MonoBehaviour
         {
             Death();
         }
-
-        return _currentHp;
     }
-
     private IEnumerator FlashOnDamage(float FlashDuration)
     {
         _spriteRenderer.color = new Color(0.8235294f, 0.375534f,0.375534f,1);

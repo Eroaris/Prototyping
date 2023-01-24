@@ -11,19 +11,28 @@ public class Player : MonoBehaviour
     public Vector3 moveInput;
     public bool canUpgrade;
     public float speed = 4.5f;
+    
     public int maxHealth = 3;
     private int _currentHealth;
+    public TextMeshProUGUI healthtext;
+    
     private float _lastHitTime;
     private const float IFrameDuration = 2;
+   
     public int currentXP;
     public float maxXP = 10;
+    
     public float knockBackPower = 1;
     public float knockBackTime;
+    
     public float attackCooldown;
     public float _cooldownTimer = 0.5f;
-    public int damage;
-    public float xpGrowth = 3;
     private bool isInCooldown;
+    
+    public int damage;
+    
+    public float xpGrowth = 3;
+    
     
 
     private void OnEnable()
@@ -78,6 +87,7 @@ public class Player : MonoBehaviour
         _cooldownTimer = attackCooldown;
         canUpgrade = false;
         swordAnim.speed = 0.75f;
+        healthtext.text = _currentHealth + "/" + maxHealth;
     }
 
     void Update()
@@ -107,7 +117,7 @@ public class Player : MonoBehaviour
         {
             _currentHealth -= damageAmount;
             _lastHitTime = Time.realtimeSinceStartup;
-            print("Damage Taken! HP left:"+_currentHealth);
+            healthtext.text = _currentHealth + "/" + maxHealth;
         }
 
         if (_currentHealth <= 0)
