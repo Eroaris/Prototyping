@@ -2713,17 +2713,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2086153003}
     - target: {fileID: 4937059955239381598, guid: db8cf7c835906ff4294ef6997a56ece2, type: 3}
-      propertyPath: maxXP
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4937059955239381598, guid: db8cf7c835906ff4294ef6997a56ece2, type: 3}
       propertyPath: levelUPUI
       value: 
       objectReference: {fileID: 284537969}
-    - target: {fileID: 4937059955239381598, guid: db8cf7c835906ff4294ef6997a56ece2, type: 3}
-      propertyPath: maxHealth
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 4937059955239381598, guid: db8cf7c835906ff4294ef6997a56ece2, type: 3}
       propertyPath: healthtext
       value: 
