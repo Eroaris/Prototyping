@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
 
     public int healthIncrease;
     private float slimeInterval = 1f;
-    private float explodyInterval = 20f;
+    //private float explodyInterval = 20f;
     public float minRadius;
     public float maxRadius;
     private float randomAngle;

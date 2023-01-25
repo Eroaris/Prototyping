@@ -1,19 +1,21 @@
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using TMPro;
+using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public GameStateManager GSM;
     public GameObject levelUPUI;
     public Animator anim;
     public Animator swordAnim;
+    private SpriteRenderer _spriteRenderer;
 
     public Vector3 moveInput;
     public bool canUpgrade;
     public float speed = 4.5f;
     
-    public int maxHealth = 3;
-    private int _currentHealth;
+    public Image[] hearts;
+    public int _currentHealth;
     public TextMeshProUGUI healthtext;
     
     private float _lastHitTime;
@@ -83,11 +85,19 @@ public class Player : MonoBehaviour
     void Awake()
     {
         anim = GetComponent<Animator>();
-        _currentHealth = maxHealth;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
         _cooldownTimer = attackCooldown;
         canUpgrade = false;
         swordAnim.speed = 0.75f;
-        healthtext.text = _currentHealth + "/" + maxHealth;
+        
+        for (int i = _currentHealth; i >= 0; i--)
+        {
+            hearts[i].gameObject.SetActive(true);
+        }   
     }
 
     void Update()
@@ -115,13 +125,19 @@ public class Player : MonoBehaviour
         float check = _lastHitTime + IFrameDuration;
         if (check < Time.realtimeSinceStartup)
         {
-            _currentHealth -= damageAmount;
+            hearts[_currentHealth].gameObject.SetActive(false);
+            _currentHealth--;
+            _spriteRenderer.color = Color.cyan;
+            Invoke(nameof(removeBlue),IFrameDuration);
+            Invoke(nameof(removeBlue),IFrameDuration);
             _lastHitTime = Time.realtimeSinceStartup;
-            healthtext.text = _currentHealth + "/" + maxHealth;
+            
+           
         }
 
-        if (_currentHealth <= 0)
+        if (_currentHealth < 0)
         {
+            hearts[_currentHealth].gameObject.SetActive(false);
             print("You Lose");
             Debug.Break();
             GSM.SetCurrentState(GameStateManager.GameState.Lose);
@@ -130,6 +146,10 @@ public class Player : MonoBehaviour
         return _currentHealth;
     }
 
+    void removeBlue()
+    {
+        _spriteRenderer.color = Color.white;
+    }
     public void UpgradeDamage()
     {
         if (canUpgrade)
@@ -147,9 +167,7 @@ public class Player : MonoBehaviour
          if (canUpgrade)
          {
              _currentHealth++;
-             maxHealth++;
-             print("Max Health:"+ maxHealth);
-             print("Current Health:" + _currentHealth);
+             hearts[_currentHealth].gameObject.SetActive(true);
              canUpgrade = false;
              GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
