@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Scene = UnityEditor.SearchService.Scene;
+
 public class Player : MonoBehaviour
 {
     public GameStateManager GSM;
@@ -9,6 +12,7 @@ public class Player : MonoBehaviour
     public Animator anim;
     public Animator swordAnim;
     private SpriteRenderer _spriteRenderer;
+    public Canvas gameOverScreen;
 
     public Vector3 moveInput;
     public bool canUpgrade;
@@ -34,9 +38,6 @@ public class Player : MonoBehaviour
     public float swordRange;
     
     public float xpGrowth = 3;
-    
-    
-
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
@@ -77,7 +78,11 @@ public class Player : MonoBehaviour
                 break;
 
             case GameStateManager.GameState.Lose:
-                anim.SetBool("Dying",true);s
+                /*Time.timeScale = 0;
+                anim.updateMode = AnimatorUpdateMode.UnscaledTime;*/
+                removeBlue();
+                anim.SetBool("Dying",true);
+                Invoke(nameof(GameOver),3);
                 break;
         }
     }
@@ -90,6 +95,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        anim.updateMode = AnimatorUpdateMode.Normal;
         _cooldownTimer = attackCooldown;
         canUpgrade = false;
         swordAnim.speed = 0.75f;
@@ -117,8 +123,16 @@ public class Player : MonoBehaviour
         if (isInCooldown)
         {
             _cooldownTimer -= Time.deltaTime;   
-        }
+        }  
        swordAnim.SetBool("InCooldown",isInCooldown);
+
+       if (GSM.GetCurrentState() == GameStateManager.GameState.Lose)
+       {
+           if (Input.GetKeyDown(KeyCode.Space))
+           {
+               SceneManager.LoadScene("SampleScene");
+           }
+       }
     }
 
     public int ApplyDamage(int damageAmount)
@@ -132,13 +146,10 @@ public class Player : MonoBehaviour
             Invoke(nameof(removeBlue),IFrameDuration);
             Invoke(nameof(removeBlue),IFrameDuration);
             _lastHitTime = Time.realtimeSinceStartup;
-            
-           
         }
 
         if (_currentHealth < 0)
         {
-            Debug.Break();
             GSM.SetCurrentState(GameStateManager.GameState.Lose);
         }
 
@@ -204,5 +215,10 @@ public class Player : MonoBehaviour
          anim.SetFloat("AnimMoveX",moveInput.x);
          anim.SetFloat("AnimMoveY",moveInput.y);
      }
-     
+
+     public void GameOver()
+     {
+         gameOverScreen.gameObject.SetActive(true);
+         Time.timeScale = 0;
+     }
 }

@@ -1,12 +1,16 @@
+using System;
 using UnityEngine;
 using TMPro;
 public class Timer : MonoBehaviour
 {
-    public TextMeshProUGUI timertext;
-    public float timeLimit = 0;
+    private TextMeshProUGUI timertext;
     public float tmpTime;
     int _minutes, _seconds;
 
+    private void Awake()
+    {
+        timertext = GetComponent<TextMeshProUGUI>();
+    }
 
     void Update()
     {
@@ -39,12 +43,6 @@ public class Timer : MonoBehaviour
                 Time.timeScale = 0;
                 break;
             case GameStateManager.GameState.Pause:
-                Time.timeScale = 0;
-                break;
-            case GameStateManager.GameState.Lose:
-                Time.timeScale = 0;
-                break;
-            case GameStateManager.GameState.Win:
                 Time.timeScale = 0;
                 break;
         }
