@@ -16,8 +16,7 @@ public class Player : MonoBehaviour
     
     public Image[] hearts;
     public int _currentHealth;
-    public TextMeshProUGUI healthtext;
-    
+
     private float _lastHitTime;
     private const float IFrameDuration = 2;
    
@@ -32,6 +31,7 @@ public class Player : MonoBehaviour
     private bool isInCooldown;
     
     public int damage;
+    public float swordRange;
     
     public float xpGrowth = 3;
     
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
                 break;
 
             case GameStateManager.GameState.Lose:
-                anim.SetBool("Dying",true);
+                anim.SetBool("Dying",true);s
                 break;
         }
     }
@@ -93,7 +93,8 @@ public class Player : MonoBehaviour
         _cooldownTimer = attackCooldown;
         canUpgrade = false;
         swordAnim.speed = 0.75f;
-        
+        swordRange = 1;
+
         for (int i = _currentHealth; i >= 0; i--)
         {
             hearts[i].gameObject.SetActive(true);
@@ -137,8 +138,6 @@ public class Player : MonoBehaviour
 
         if (_currentHealth < 0)
         {
-            hearts[_currentHealth].gameObject.SetActive(false);
-            print("You Lose");
             Debug.Break();
             GSM.SetCurrentState(GameStateManager.GameState.Lose);
         }
@@ -155,8 +154,6 @@ public class Player : MonoBehaviour
         if (canUpgrade)
         {
             damage++;
-            print("Current Damage:"+damage);
-            print(Time.timeScale);
             canUpgrade = false;
             GSM.SetCurrentState(GameStateManager.GameState.Playing);
         }
@@ -177,7 +174,6 @@ public class Player : MonoBehaviour
          if (canUpgrade)
          {
              speed += 0.25f;
-             print("Movespeed:" + speed);
              canUpgrade = false;
              GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
@@ -188,14 +184,25 @@ public class Player : MonoBehaviour
          if (canUpgrade)
          {
              attackCooldown *= 0.85f;
-             print(attackCooldown);
              canUpgrade = false;
              GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }
      }
+
+     public void UpgradeKnockback()
+     {
+         if (canUpgrade)
+         {
+            knockBackPower += 3;
+             canUpgrade = false;
+             GSM.SetCurrentState(GameStateManager.GameState.Playing);
+         }
+     }
+     
      void Animate()
      {
          anim.SetFloat("AnimMoveX",moveInput.x);
          anim.SetFloat("AnimMoveY",moveInput.y);
      }
+     
 }

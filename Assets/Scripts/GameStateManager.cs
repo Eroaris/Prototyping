@@ -10,6 +10,8 @@ public class GameStateManager : MonoBehaviour
      public delegate void GameStateChangeDelegate(GameState targetState);
      public static event GameStateChangeDelegate OnGameStateChanged; 
     
+     private GameState _currentState;
+     
      private void Awake()
      {
          SetCurrentState(GameState.Playing);
@@ -36,9 +38,7 @@ public class GameStateManager : MonoBehaviour
              Win,
              Lose, 
          }
-    
-         private GameState _currentState;
-
+         
          public GameState GetCurrentState()
          {
              return _currentState;
@@ -53,6 +53,7 @@ public class GameStateManager : MonoBehaviour
                  OnGameStateChanged.Invoke(_currentState);
              }
          }
+
          private void Start()
          {
              SetCurrentState(GameState.Playing);

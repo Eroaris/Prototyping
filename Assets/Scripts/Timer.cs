@@ -30,21 +30,21 @@ public class Timer : MonoBehaviour
         {
             
             case GameStateManager.GameState.Ready:
-                Time.timeScale = 1;
+                Time.timeScale = 0;
                 break;
-            
             case GameStateManager.GameState.Playing:
                 Time.timeScale = 1;
                 break;
-            
             case GameStateManager.GameState.LevelUP:
                 Time.timeScale = 0;
                 break;
-                
             case GameStateManager.GameState.Pause:
                 Time.timeScale = 0;
                 break;
             case GameStateManager.GameState.Lose:
+                Time.timeScale = 0;
+                break;
+            case GameStateManager.GameState.Win:
                 Time.timeScale = 0;
                 break;
         }

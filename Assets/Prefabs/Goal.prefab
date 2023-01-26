@@ -179,7 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3af0b948f45220a4ba8eaad18373f8cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalText: {fileID: 0}
+  questtext: {fileID: 0}
+  questpanel: {fileID: 0}
+  GSM: {fileID: 0}
 --- !u!58 &3999610247004101174
 CircleCollider2D:
   m_ObjectHideFlags: 0
