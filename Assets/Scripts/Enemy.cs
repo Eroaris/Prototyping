@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public Vector3 _movement;
     public Transform target;
     public Animator anim;
+    private AudioSource audioSource;
 
     public float speed;
     public float maxSpeed;
@@ -28,7 +29,7 @@ public class Enemy : MonoBehaviour
     private bool isDying;
     private bool inKnockback;
     public float spawnOffset = 0.2f;
-    
+    public AudioClip onHit;
     
     public enum EnemyState
     {
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         isDying = false;
         healthIncrease = Time.time / 30;
         healthIncrease = Mathf.Floor(healthIncrease);
@@ -84,6 +86,7 @@ public class Enemy : MonoBehaviour
         if (check < Time.realtimeSinceStartup && isDying == false)
         {
             _currentHp -= damageAmount;
+            audioSource.PlayOneShot(onHit);
             StartCoroutine(FlashOnDamage(IFrameDuration));
             _lastHitTime = Time.realtimeSinceStartup;
         }

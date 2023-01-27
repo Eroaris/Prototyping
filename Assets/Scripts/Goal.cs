@@ -8,9 +8,11 @@ public class Goal : MonoBehaviour
     public TextMeshProUGUI questtext;
     public CanvasGroup questpanel;
     public GameStateManager GSM;
-
-    Color lerpedColor;
+    private AudioSource audioSource;
     private SpriteRenderer _spriteRenderer;
+    Color lerpedColor;
+
+    public AudioClip reactorCharged;
     float goalTime = 10f; 
     float timePassed;
     private bool playerInside;
@@ -19,6 +21,7 @@ public class Goal : MonoBehaviour
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         playerInside = false;
     }
     private void Start()
@@ -50,7 +53,7 @@ public class Goal : MonoBehaviour
         
             percentComplete = timePassed / goalTime;
             percentComplete = Mathf.Clamp01(percentComplete);
-            lerpedColor = Color.Lerp(new Color(0.07450981f,0.5450981f,0.9058824f,0), new Color(0.07450981f,0.5450981f,0.9058824f,1), percentComplete);
+            lerpedColor = Color.Lerp(new Color(0.01960784f,0.8784314f,0.4941177f,0), new Color(0.01960784f,0.8784314f,0.4941177f,1), percentComplete);
             _spriteRenderer.color = lerpedColor;
         }
     }
@@ -71,6 +74,7 @@ public class Goal : MonoBehaviour
             if (percentComplete >= 1 && GSM.GetCurrentState() == GameStateManager.GameState.Playing)
             {
                 activatedGoals++;
+                audioSource.PlayOneShot(reactorCharged);
                 StartCoroutine(Questtext(activatedGoals, 3, 1));
                 if (activatedGoals == 4 && GSM.GetCurrentState() != GameStateManager.GameState.Win)
                 {

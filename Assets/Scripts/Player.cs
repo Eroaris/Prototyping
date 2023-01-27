@@ -3,7 +3,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Scene = UnityEditor.SearchService.Scene;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +13,11 @@ public class Player : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     public Canvas gameOverScreen;
 
+    private AudioSource audioSource;
+    public AudioClip lvlUp;
+    public AudioClip dmgTaken;
+    public AudioClip xpGained;
+    
     public Vector3 moveInput;
     public bool canUpgrade;
     public float speed = 4.5f;
@@ -54,7 +58,11 @@ public class Player : MonoBehaviour
         switch (enemyState)
         {
             case Enemy.EnemyState.Dead:
-                currentXP++;
+                if (anim.GetBool("Dying") == false)
+                {
+                    currentXP++;
+                    audioSource.PlayOneShot(xpGained,0.5f);
+                } 
                 break;
         }
     }
@@ -91,6 +99,7 @@ public class Player : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -111,20 +120,28 @@ public class Player : MonoBehaviour
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
-        transform.position += moveInput.normalized * speed * Time.deltaTime;
+
+        if (anim.GetBool("Dying") == false)
+        {
+            transform.position += moveInput.normalized * speed * Time.deltaTime;
+        }
+        
         Animate();
         
-        if (currentXP >= maxXP)
+        if (currentXP >= maxXP && anim.GetBool("Dying") == false)
         {
             GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
+            audioSource.PlayOneShot(lvlUp,0.7f);
         }
 
         isInCooldown = _cooldownTimer > 0;
         if (isInCooldown)
         {
             _cooldownTimer -= Time.deltaTime;   
-        }  
-       swordAnim.SetBool("InCooldown",isInCooldown);
+        }
+       
+        
+        swordAnim.SetBool("InCooldown",isInCooldown);
 
        if (GSM.GetCurrentState() == GameStateManager.GameState.Lose)
        {
@@ -138,13 +155,13 @@ public class Player : MonoBehaviour
     public int ApplyDamage(int damageAmount)
     {
         float check = _lastHitTime + IFrameDuration;
-        if (check < Time.realtimeSinceStartup)
+        if (check < Time.realtimeSinceStartup && anim.GetBool("Dying") == false)
         {
             hearts[_currentHealth].gameObject.SetActive(false);
             _currentHealth--;
             _spriteRenderer.color = Color.cyan;
             Invoke(nameof(removeBlue),IFrameDuration);
-            Invoke(nameof(removeBlue),IFrameDuration);
+            audioSource.PlayOneShot(dmgTaken,0.7f);
             _lastHitTime = Time.realtimeSinceStartup;
         }
 

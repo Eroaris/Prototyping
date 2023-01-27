@@ -7,14 +7,16 @@ public class Sword : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Animator anim;
     public GameStateManager GSM;
+   
+    
     
     private Vector3 _currentDirection;
     public bool canUpgrade;
     public Player player;
     public Vector2 difference;
     private float swordLength;
-    
-    
+
+
     private void OnEnable()
     {
         GameStateManager.OnGameStateChanged += OnGameStateChanged;
