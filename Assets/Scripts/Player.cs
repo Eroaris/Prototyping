@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
                 if (anim.GetBool("Dying") == false)
                 {
                     currentXP++;
-                    audioSource.PlayOneShot(xpGained,0.5f);
+                    audioSource.PlayOneShot(xpGained,0.3f);
                 } 
                 break;
         }
@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
     {
         if (canUpgrade)
         {
-            damage++;
+            damage+=3;
             canUpgrade = false;
             GSM.SetCurrentState(GameStateManager.GameState.Playing);
         }
@@ -211,7 +211,7 @@ public class Player : MonoBehaviour
      {
          if (canUpgrade)
          {
-             attackCooldown *= 0.85f;
+             attackCooldown *= 0.80f;
              canUpgrade = false;
              GSM.SetCurrentState(GameStateManager.GameState.Playing);
          }

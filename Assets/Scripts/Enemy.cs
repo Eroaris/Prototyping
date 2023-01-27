@@ -57,8 +57,11 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         _movement = target.transform.position - transform.position;
-       myRigidbody.velocity += (Vector2) _movement.normalized * speed;
-       if (myRigidbody.velocity.magnitude > maxSpeed && inKnockback == false)
+        if (isDying == false)
+        {
+            myRigidbody.velocity += (Vector2) _movement.normalized * speed;
+        }
+        if (myRigidbody.velocity.magnitude > maxSpeed && inKnockback == false)
        {
            myRigidbody.velocity = Vector2.ClampMagnitude(myRigidbody.velocity, maxSpeed);
        }
@@ -94,6 +97,7 @@ public class Enemy : MonoBehaviour
         if (_currentHp <= 0)
         {
             Death();
+            
         }
     }
     private IEnumerator FlashOnDamage(float FlashDuration)
@@ -108,7 +112,7 @@ public class Enemy : MonoBehaviour
     {
         if (col != null )
         {
-            if (inKnockback == false && isDying == false)
+            if (inKnockback == false)
             {
                 inKnockback = true;
                 myRigidbody.AddForce(difference, ForceMode2D.Impulse);

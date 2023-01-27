@@ -45,6 +45,11 @@ public class Sword : MonoBehaviour
         canUpgrade = false;
     }
 
+    private void Start()
+    {
+        anim.speed = 1.5f;
+    }
+
     void Update()
     {
         if (player.moveInput != Vector3.zero)
