@@ -174,7 +174,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   speed: 0.4
   maxSpeed: 2
-  baseHealth: 3
+  baseHealth: 2
   spawnOffset: 0.2
   onHit: {fileID: 8300000, guid: 45bac6a3e8358b04daccf5ae05af624c, type: 3}
 --- !u!114 &7803523870497763837

@@ -16,7 +16,7 @@ public class Goal : MonoBehaviour
 
     public AudioClip reactorComplete;
     public AudioClip reactorCharging;
-    float goalTime = 6f; 
+    float goalTime = 60f; 
     float timePassed;
     private bool playerInside;
     private static int activatedGoals;
