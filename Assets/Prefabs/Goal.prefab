@@ -184,7 +184,8 @@ MonoBehaviour:
   questpanel: {fileID: 0}
   GSM: {fileID: 0}
   player: {fileID: 0}
-  reactorCharged: {fileID: 8300000, guid: 03127c8753c6484488aa3c1f2de61c14, type: 3}
+  reactorComplete: {fileID: 8300000, guid: 03127c8753c6484488aa3c1f2de61c14, type: 3}
+  reactorCharging: {fileID: 8300000, guid: 929dba36f1a139a4580c521fcb6f8df8, type: 3}
 --- !u!58 &3999610247004101174
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -212,7 +213,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4822031934358783217, guid: b73778ee9c5a16e40bd963d8630a860c, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

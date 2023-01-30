@@ -42,14 +42,15 @@ public class Enemy : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         anim = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>(); 
+        
+    }
+    private void Start()
+    {
         isDying = false;
         healthIncrease = Time.time / 30;
         healthIncrease = Mathf.Floor(healthIncrease);
         maxHP = healthIncrease + baseHealth;
-    }
-    private void Start()
-    {
         _currentHp = maxHP;
         OnEnemyDestroyed?.Invoke(EnemyState.Alive);
         inKnockback = false;

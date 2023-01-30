@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class Goal : MonoBehaviour
 {
@@ -13,8 +14,9 @@ public class Goal : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     Color lerpedColor;
 
-    public AudioClip reactorCharged;
-    float goalTime = 10f; 
+    public AudioClip reactorComplete;
+    public AudioClip reactorCharging;
+    float goalTime = 6f; 
     float timePassed;
     private bool playerInside;
     private static int activatedGoals;
@@ -53,7 +55,6 @@ public class Goal : MonoBehaviour
         if (playerInside)
         {
             timePassed += Time.deltaTime;
-        
             percentComplete = timePassed / goalTime;
             percentComplete = Mathf.Clamp01(percentComplete);
             lerpedColor = Color.Lerp(new Color(0.01960784f,0.8784314f,0.4941177f,0), new Color(0.01960784f,0.8784314f,0.4941177f,1), percentComplete);
@@ -68,22 +69,28 @@ public class Goal : MonoBehaviour
             playerInside = true;
         }
     }
+    
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
             playerInside = false;
-            
+            audioSource.Stop();
             if (percentComplete >= 1 && GSM.GetCurrentState() == GameStateManager.GameState.Playing && isCompleted == false)
             {
                 activatedGoals++;
+                
                 player._currentHealth++;
                 player.hearts[player._currentHealth].gameObject.SetActive(true);
                 player._currentHealth++;
                 player.hearts[player._currentHealth].gameObject.SetActive(true);
+                
                 isCompleted = true;
-                audioSource.PlayOneShot(reactorCharged);
+                
+                audioSource.PlayOneShot(reactorComplete);
+                
                 StartCoroutine(Questtext(activatedGoals, 3, 1));
+                
                 if (activatedGoals == 4 && GSM.GetCurrentState() != GameStateManager.GameState.Win)
                 {
                     GSM.SetCurrentState(GameStateManager.GameState.Win);

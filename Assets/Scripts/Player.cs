@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public Animator swordAnim;
     private SpriteRenderer _spriteRenderer;
     public Canvas gameOverScreen;
+    public Canvas victoryScreen;
 
     private AudioSource audioSource;
     public AudioClip lvlUp;
@@ -82,7 +83,7 @@ public class Player : MonoBehaviour
                 break;
             
             case GameStateManager.GameState.Win:
-                //cheer animation+vitory screen
+                Invoke(nameof(Win),2);
                 break;
 
             case GameStateManager.GameState.Lose:
@@ -118,58 +119,59 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
+        Animate();
 
         if (anim.GetBool("Dying") == false)
         {
+            moveInput.x = Input.GetAxisRaw("Horizontal");
+            moveInput.y = Input.GetAxisRaw("Vertical");
+
             transform.position += moveInput.normalized * speed * Time.deltaTime;
-        }
-        
-        Animate();
-        
-        if (currentXP >= maxXP && anim.GetBool("Dying") == false)
-        {
-            GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
-            audioSource.PlayOneShot(lvlUp,0.7f);
+
+            if (currentXP >= maxXP)
+            {
+                GSM.SetCurrentState(GameStateManager.GameState.LevelUP);
+                audioSource.PlayOneShot(lvlUp,0.7f);
+            }
+
+            isInCooldown = _cooldownTimer > 0;
+            if (isInCooldown)
+            {
+                _cooldownTimer -= Time.deltaTime;   
+            }
+            swordAnim.SetBool("InCooldown",isInCooldown);
         }
 
-        isInCooldown = _cooldownTimer > 0;
-        if (isInCooldown)
-        {
-            _cooldownTimer -= Time.deltaTime;   
-        }
-       
-        
-        swordAnim.SetBool("InCooldown",isInCooldown);
-
-       if (GSM.GetCurrentState() == GameStateManager.GameState.Lose)
+        if (GSM.GetCurrentState() == GameStateManager.GameState.Lose || GSM.GetCurrentState() == GameStateManager.GameState.Win)
        {
            if (Input.GetKeyDown(KeyCode.Space))
            {
                SceneManager.LoadScene("SampleScene");
+               GSM.SetCurrentState(GameStateManager.GameState.Playing);
            }
        }
     }
 
     public int ApplyDamage(int damageAmount)
     {
-        float check = _lastHitTime + IFrameDuration;
-        if (check < Time.realtimeSinceStartup && anim.GetBool("Dying") == false)
+        if (anim.GetBool("Dying") == false)
         {
-            hearts[_currentHealth].gameObject.SetActive(false);
-            _currentHealth--;
-            _spriteRenderer.color = Color.cyan;
-            Invoke(nameof(removeBlue),IFrameDuration);
-            audioSource.PlayOneShot(dmgTaken,0.7f);
-            _lastHitTime = Time.realtimeSinceStartup;
-        }
+            float check = _lastHitTime + IFrameDuration;
+            if (check < Time.realtimeSinceStartup)
+            {
+                hearts[_currentHealth].gameObject.SetActive(false);
+                _currentHealth--;
+                _spriteRenderer.color = Color.cyan;
+                Invoke(nameof(removeBlue),IFrameDuration);
+                audioSource.PlayOneShot(dmgTaken,0.7f);
+                _lastHitTime = Time.realtimeSinceStartup;
+            }
 
-        if (_currentHealth < 0)
-        {
-            GSM.SetCurrentState(GameStateManager.GameState.Lose);
+            if (_currentHealth < 0)
+            {
+                GSM.SetCurrentState(GameStateManager.GameState.Lose);
+            }
         }
-
         return _currentHealth;
     }
 
@@ -236,6 +238,11 @@ public class Player : MonoBehaviour
      public void GameOver()
      {
          gameOverScreen.gameObject.SetActive(true);
+         Time.timeScale = 0;
+     }
+     public void Win()
+     {
+         victoryScreen.gameObject.SetActive(true);
          Time.timeScale = 0;
      }
 }
