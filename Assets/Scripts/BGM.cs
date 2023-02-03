@@ -15,15 +15,10 @@ public class BGM : MonoBehaviour
     {
         switch (targetstate)
         {
-            case GameStateManager.GameState.Playing:
-                _audioSource.Play();
-                _audioSource.clip = playingBGM;
-                break;
-           case GameStateManager.GameState.Lose:
+            case GameStateManager.GameState.Lose:
                _audioSource.clip = gameOverBGM;
                _audioSource.Play();
                break;
-
         }
     }
         private void OnEnable()
@@ -47,5 +42,11 @@ public class BGM : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        _audioSource.clip = playingBGM;
+        _audioSource.Play();
     }
 }
