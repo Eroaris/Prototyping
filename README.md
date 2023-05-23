@@ -6,6 +6,6 @@ Protyping Project January 2023
 
 Credits:
 
-Quinn Hauers
-Ludwig Löscher
+Quinn Hauers;
+Ludwig Löscher;
 Shawn Okorie
